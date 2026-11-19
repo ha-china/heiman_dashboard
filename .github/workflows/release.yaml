@@ -44,3 +44,27 @@ jobs:
             release_flags+=(--latest)
           fi
           gh release create "$GITHUB_REF_NAME" dist/heiman_dashboard.js "${release_flags[@]}"
+      - name: Verify published release and downloaded installation file
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          release_dir="$(mktemp -d)"
+          trap 'rm -rf "$release_dir"' EXIT
+          gh release view "$GITHUB_REF_NAME" --json tagName,isDraft,isPrerelease,publishedAt > "$release_dir/release.json"
+          node --input-type=module - "$release_dir/release.json" <<'NODE'
+          import assert from "node:assert/strict";
+          import { readFileSync } from "node:fs";
+          const release = JSON.parse(readFileSync(process.argv[2], "utf8"));
+          const tag = process.env.GITHUB_REF_NAME;
+          assert.equal(release.tagName, tag, "Published release tag differs");
+          assert.equal(release.isDraft, false, "Release is still a draft");
+          assert.ok(release.publishedAt, "Release has not been published");
+          assert.equal(release.isPrerelease, tag.slice(1).split("+")[0].includes("-"), "Release stability differs from the tag");
+          NODE
+          gh release download "$GITHUB_REF_NAME" --pattern heiman_dashboard.js --dir "$release_dir"
+          cmp dist/heiman_dashboard.js "$release_dir/heiman_dashboard.js"
+      - name: Validate HACS after publication
+        uses: hacs/action@main
+        with:
+          category: plugin

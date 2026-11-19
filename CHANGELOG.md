@@ -2,6 +2,7 @@
 
 ## 0.1.0 — Unreleased
 
+- Verify published release metadata and installation asset contents, and run HACS checks directly after automated publication.
 - Validate release versions, locale resources, standalone packaging and documentation links in CI; gate publication on HACS checks and mark prerelease tags correctly.
 - Merge inline and additional settings into one Device control panel without a second settings expander.
 - Default to following the current HA user's language with English fallback; use English repository content and isolate localized strings in locale resources.

@@ -32,7 +32,9 @@ All locale JSON is bundled into the JavaScript file. This frontend plugin does n
 
 ## Publishing a release
 
-The package version must match the Git tag: package version `0.1.0` corresponds to `v0.1.0`. Update the lockfile, demo, CHANGELOG and [prepared release notes](RELEASE_NOTES.md) together when changing that version. Pushing a matching tag triggers the Release workflow, which validates the full payload, runs browser and HACS checks, then publishes a GitHub Release with `heiman_dashboard.js` attached.
+The package version must match the Git tag: package version `0.1.0` corresponds to `v0.1.0`. Update the lockfile, demo, CHANGELOG and [prepared release notes](RELEASE_NOTES.md) together when changing that version. Before pushing a release tag, replace `Unreleased` in the matching CHANGELOG heading with the actual release date and commit the final documentation. Pushing a matching tag triggers the Release workflow, which validates the full payload, runs browser and HACS checks, then publishes a GitHub Release with `heiman_dashboard.js` attached.
+
+The same workflow then verifies the published tag, draft status and prerelease flag, downloads the installation asset and compares it byte for byte with the validated bundle. It runs HACS validation again after publication. This does not rely on a second workflow being triggered: releases created with `GITHUB_TOKEN` do not trigger another workflow through `release.published`. The standalone release trigger still covers releases published manually. See [GitHub's workflow-triggering rules](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
 
 A prerelease package/tag such as `0.1.0-beta.1` / `v0.1.0-beta.1` is marked as a GitHub prerelease automatically. A plain tag such as `v0.1.0` creates a normal release. Set the package, lockfile, demo, changelog and release notes to the same prerelease version before using a prerelease tag. HACS requires a full published GitHub Release for default-catalog submission; a normal release after the required checks and maintainer acceptance is recommended for this project.
 
