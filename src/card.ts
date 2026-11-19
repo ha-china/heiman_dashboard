@@ -112,7 +112,8 @@ export class HeimanDeviceCard extends HeimanElement {
     const metrics = metricRoles.flatMap((role) =>
       bindings[role]?.[0] ? [{ role, id: bindings[role]![0] }] : [],
     );
-    const metricColumns = metrics.length === 4 ? 2 : Math.min(metrics.length, 3);
+    const metricColumns =
+      metrics.length === 4 ? 2 : Math.min(metrics.length, 3);
     const controls =
       this._config.show_controls !== false
         ? (bindings.control ?? []).filter((id) => domainOf(id) !== "siren")
