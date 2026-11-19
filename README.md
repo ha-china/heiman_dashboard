@@ -2,7 +2,7 @@
 
 [Device catalog](docs/SUPPORTED_DEVICES.md) · [Development](docs/ARCHITECTURE.md)
 
-![Home Assistant](https://img.shields.io/badge/Home_Assistant-2025.10%2B-41BDF5)
+![HA compatibility target](https://img.shields.io/badge/HA_target-2025.10%2B-41BDF5)
 ![HACS custom repository](https://img.shields.io/badge/HACS-Custom_repository-blue)
 ![License](https://img.shields.io/badge/License-Apache_2.0-green)
 
@@ -53,6 +53,8 @@ type: module
 For YAML-managed resources, add that entry under `lovelace.resources` in your existing configuration. Restart/reload as required by your configuration. Do not create duplicate entries for the same resource.
 
 This repository is prepared for HACS as a **Dashboard** (`plugin` in validation workflows). It has not yet been submitted to or approved for HACS's default catalog.
+
+Custom-repository installation can use the default branch. Default-catalog submission additionally requires a published GitHub Release after successful HACS checks; a tag alone is insufficient. See the [submission audit](docs/HACS_AUDIT.md) and [release instructions](docs/RELEASING.md).
 
 ### Manual installation
 
@@ -124,15 +126,20 @@ Source code, comments, documentation, demo content and commit messages use Engli
 
 Requires Node.js **22.21+** and npm.
 
+The declared HA compatibility target is **2025.10.0+**. Live frontend checks have been performed on **HA 2026.11.0**; minimum-version acceptance and physical alarm/self-test acceptance remain separate checks. Catalog coverage does not certify every model or firmware.
+
 ```sh
 npm ci
 npm run check
+npm run validate:release -- --tag v0.1.0
 npx playwright install --with-deps chromium
 npm run test:browser
 npm run dev
 ```
 
 Open `http://127.0.0.1:5173` for an interactive local preview with explicitly simulated data, styles, scenarios and the real editor. Re-run the build or restart the preview after source changes. Update the product catalog with `npm run catalog:update`; review the generated changes before publishing. See [architecture](docs/ARCHITECTURE.md), [release instructions](docs/RELEASING.md) and [contributing](CONTRIBUTING.md).
+
+`npm run check` also validates locale completeness/imports, package/lockfile/demo/bundle versions, catalog documentation, local documentation links and installation images. The build verifies that every locale is bundled and that no external runtime files are required. HACS reads plugin versions from GitHub releases, or commit identifiers for branch installs; `hacs.json` does not use a `version` field.
 
 ## License and support
 

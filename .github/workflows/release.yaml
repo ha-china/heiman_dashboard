@@ -12,8 +12,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
           cache: npm
@@ -22,10 +22,25 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run check
+      - name: Verify complete versioned release payload
+        run: npm run validate:release -- --tag "$GITHUB_REF_NAME"
       - run: git diff --exit-code -- dist/
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - name: Validate HACS before publication
+        uses: hacs/action@main
+        with:
+          category: plugin
       - name: Publish release with installable card
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/heiman_dashboard.js --verify-tag --generate-notes
+        shell: bash
+        run: |
+          release_flags=(--verify-tag --title "HEIMAN Dashboard $GITHUB_REF_NAME" --notes-file docs/RELEASE_NOTES.md)
+          release_version="${GITHUB_REF_NAME#v}"
+          if [[ "${release_version%%+*}" == *-* ]]; then
+            release_flags+=(--prerelease)
+          else
+            release_flags+=(--latest)
+          fi
+          gh release create "$GITHUB_REF_NAME" dist/heiman_dashboard.js "${release_flags[@]}"

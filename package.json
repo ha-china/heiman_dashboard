@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "test": "node --import tsx --test tests/*.test.ts",
     "test:browser": "playwright test",
-    "check": "npm run typecheck && npm test && npm run build",
+    "validate:release": "node scripts/validate-release.mjs",
+    "check": "npm run typecheck && npm run build && npm test && npm run validate:release",
     "catalog:update": "node --use-env-proxy scripts/update-catalog.mjs"
   },
   "dependencies": {

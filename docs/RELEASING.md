@@ -26,10 +26,20 @@ Use English for source code, comments, documentation, demo content and commit me
 6. Verify automatic language changes, regional language codes, English fallback and explicit language overrides. Ensure that all nine locale resources have the same key set.
 7. Push the public repository and wait for both **HACS Action** and **Validate** to pass. HACS validation has no ignored checks and requires actual public repository metadata.
 
+Run `npm run validate:release -- --tag v0.1.0` before tagging version 0.1.0. This checks package/lockfile/demo/bundle/release-note/changelog versions, supported locale files, duplicate or missing translation keys, locale imports, standalone distribution, local documentation links and catalog counts. It validates the local payload without publishing a tag or release.
+
+All locale JSON is bundled into the JavaScript file. This frontend plugin does not need a separate runtime translation download or the Python integration `strings.json`/`translations/` layout. HACS plugin validation is distinct from integration-only hassfest checks.
+
 ## Publishing a release
 
-The package version must match the Git tag: package version `0.1.0` corresponds to `v0.1.0`. Pushing a matching tag triggers the Release workflow, which validates, builds, runs browser checks and publishes a GitHub Release with `heiman_dashboard.js` attached. Use a pre-release for initial testing and publish a stable release after hardware acceptance.
+The package version must match the Git tag: package version `0.1.0` corresponds to `v0.1.0`. Update the lockfile, demo, CHANGELOG and [prepared release notes](RELEASE_NOTES.md) together when changing that version. Pushing a matching tag triggers the Release workflow, which validates the full payload, runs browser and HACS checks, then publishes a GitHub Release with `heiman_dashboard.js` attached.
+
+A prerelease package/tag such as `0.1.0-beta.1` / `v0.1.0-beta.1` is marked as a GitHub prerelease automatically. A plain tag such as `v0.1.0` creates a normal release. Set the package, lockfile, demo, changelog and release notes to the same prerelease version before using a prerelease tag. HACS requires a full published GitHub Release for default-catalog submission; a normal release after the required checks and maintainer acceptance is recommended for this project.
+
+Do not confuse a successful `main` branch HACS run with a published release. A repository with no release can be used as a custom repository, but does not meet the default-catalog release requirement. GitHub tags alone do not satisfy it either.
 
 The Release workflow does not submit the project to the HACS default catalog. Before requesting inclusion, validate custom-repository installation and follow the [HACS inclusion requirements](https://hacs.xyz/docs/publish/include/). The repository owner or a major contributor can submit a pull request to the `plugin` list in `hacs/default`.
+
+Submit from a personal owner/contributor account with an editable pull request, using a new branch based on the current `hacs/default` default branch. Add `ha-china/heiman_dashboard` alphabetically to `plugin` and complete the upstream pull request template accurately. Publication and upstream submission are explicit maintainer actions; local validation performs neither.
 
 References: [publishing requirements](https://hacs.xyz/docs/publish/start/), [dashboard repository structure](https://hacs.xyz/docs/publish/plugin/), [HACS Action](https://hacs.xyz/docs/publish/action/) and [HA card registration/editor](https://contributors.home-assistant.io/frontend/custom-ui/card-editor/).
