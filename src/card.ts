@@ -109,8 +109,31 @@ export class HeimanDeviceCard extends HeimanElement {
       bindings[role]?.[0] ? [{ role, id: bindings[role]![0] }] : [],
     );
     const controls =
-      this._config.show_controls !== false ? (bindings.control ?? []) : [];
-    const settings = configurationEntities(entities, hass, preset.kind);
+      this._config.show_controls !== false
+        ? (bindings.control ?? []).filter((id) => domainOf(id) !== "siren")
+        : [];
+    const settings = [
+      ...new Map(
+        [
+          ...configurationEntities(entities, hass, preset.kind),
+          ...entities.filter(
+            (entry) =>
+              domainOf(entry.entity_id) === "siren" &&
+              !entry.disabled_by &&
+              !entry.hidden_by &&
+              !entry.hidden,
+          ),
+          ...(bindings.control ?? [])
+            .filter((id) => domainOf(id) === "siren")
+            .map(
+              (entity_id) =>
+                entities.find((entry) => entry.entity_id === entity_id) ?? {
+                  entity_id,
+                },
+            ),
+        ].map((entry) => [entry.entity_id, entry]),
+      ).values(),
+    ];
     const newest = Object.values(bindings)
       .flatMap((ids) => ids ?? [])
       .map((id) => hass.states[id]?.last_updated)
@@ -183,10 +206,12 @@ export class HeimanDeviceCard extends HeimanElement {
         ${controls.length ? html`<div class="actions">${controls.map((id) => this._renderControl(id))}</div>` : nothing}
         ${
           this._config.show_controls !== false && settings.length
-            ? html`<details class="settings">
-                <summary>${this.t("settings")}</summary>
-                ${settings.map((entry) => this._entityRow(entry.entity_id))}
-              </details>`
+            ? html`<heiman-entity-controls
+                .hass=${hass}
+                .entities=${settings}
+                .language=${languageFor(this._config, hass)}
+                .disabled=${status.severity === "unavailable"}
+              ></heiman-entity-controls>`
             : nothing
         }
         ${this._serviceError ? html`<div class="error" role="alert">${this.t("service_error")}</div>` : nothing}

@@ -10,11 +10,16 @@ declare global {
   interface Window {
     heimanDemo: {
       hass: HomeAssistant;
-      calls: { domain: string; service: string; data: { entity_id: string } }[];
+      calls: {
+        domain: string;
+        service: string;
+        data: { entity_id: string; [key: string]: unknown };
+      }[];
       config: CardConfig;
       failService: boolean;
       refresh(): void;
       setState(id: string, value: string): void;
+      setAttributes(id: string, attributes: Record<string, unknown>): void;
     };
   }
 }
@@ -153,21 +158,13 @@ test("same-model instances need selection and registry updates change the card",
   });
   await expect(page.locator("#ambiguous .empty")).toContainText("no longer");
 });
-test("native dialogs receive entity IDs; alarm settings send no service commands", async ({
+test("native information dialogs receive entity IDs without sending device commands", async ({
   page,
 }) => {
   await ready(page);
   await page.locator("#card-smoke .icon-button").click();
   await expect(page.locator("#events")).toContainText(
     "binary_sensor.smoke_smoke",
-  );
-  await page.locator("#card-smoke .settings summary").click();
-  await page
-    .locator("#card-smoke .settings .entity-row")
-    .filter({ hasText: "trigger_selftest" })
-    .click();
-  await expect(page.locator("#events")).toContainText(
-    "button.smoke_trigger_selftest",
   );
   expect(await page.evaluate(() => window.heimanDemo.calls.length)).toBe(0);
 });

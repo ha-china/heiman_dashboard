@@ -18,7 +18,8 @@ export type DeviceKind =
   | "cover"
   | "remote";
 export type CardStyle = "home" | "fire" | "minimal";
-export type Language = "zh" | "en";
+export type Language =
+  "zh" | "en" | "de" | "fr" | "es" | "it" | "nl" | "pt" | "pl";
 export type Role =
   | "smoke"
   | "co"

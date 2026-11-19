@@ -4,6 +4,7 @@ import { CATALOG, KIND_ICONS } from "./catalog";
 import { ROLES } from "./config";
 import { resolveDevice } from "./entities";
 import { icon } from "./icons";
+import { LANGUAGE_NAMES } from "./i18n";
 import { PRIMARY_ROLES } from "./state";
 import type { CardConfig, CardStyle, Role } from "./types";
 
@@ -76,6 +77,9 @@ export class HeimanCardEditor extends HeimanElement {
     }
     .style {
       display: flex;
+      flex-direction: column;
+      text-align: center;
+      overflow-wrap: anywhere;
       align-items: center;
       justify-content: center;
       gap: 6px;
@@ -260,11 +264,7 @@ export class HeimanCardEditor extends HeimanElement {
         id="language"
         @change=${(event: Event) => this._change({ language: (event.target as HTMLSelectElement).value as CardConfig["language"] })}
       >
-        ${[
-          ["auto", this.t("auto")],
-          ["zh", "简体中文"],
-          ["en", "English"],
-        ].map(
+        ${[["auto", this.t("auto")], ...Object.entries(LANGUAGE_NAMES)].map(
           ([value, label]) =>
             html`<option
               value=${value}

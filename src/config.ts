@@ -1,4 +1,5 @@
 import { findPreset } from "./catalog";
+import { LANGUAGE_NAMES } from "./i18n";
 import type { CardConfig, Role } from "./types";
 
 export const ROLES: Role[] = [
@@ -47,9 +48,12 @@ export function normalizeConfig(input: CardConfig): CardConfig {
     throw new Error("HEIMAN: style must be home, fire or minimal.");
   if (
     input.language !== undefined &&
-    !["auto", "zh", "en"].includes(input.language)
+    input.language !== "auto" &&
+    !Object.hasOwn(LANGUAGE_NAMES, input.language)
   )
-    throw new Error("HEIMAN: language must be auto, zh or en.");
+    throw new Error(
+      `HEIMAN: language must be auto or one of ${Object.keys(LANGUAGE_NAMES).join(", ")}.`,
+    );
   for (const key of ["name", "device_id", "entity"] as const) {
     if (input[key] !== undefined && typeof input[key] !== "string")
       throw new Error(`HEIMAN: ${key} must be a string.`);

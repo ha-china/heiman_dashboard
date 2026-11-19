@@ -35,6 +35,7 @@ export class HeimanElement extends LitElement {
     return translate(languageFor(this._config, this.hass), key);
   }
   protected updated(changed: PropertyValues): void {
+    this.lang = languageFor(this._config, this.hass);
     if (changed.has("hass")) void this._syncRegistry();
   }
   connectedCallback(): void {

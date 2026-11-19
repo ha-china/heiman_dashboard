@@ -1,5 +1,6 @@
 import { HeimanDeviceCard, CARD_METADATA } from "./card";
 import { HeimanCardEditor } from "./editor";
+import { HeimanEntityControls } from "./entity-controls";
 
 declare const __VERSION__: string;
 declare global {
@@ -9,8 +10,11 @@ declare global {
   interface HTMLElementTagNameMap {
     "heiman-device-card": HeimanDeviceCard;
     "heiman-device-card-editor": HeimanCardEditor;
+    "heiman-entity-controls": HeimanEntityControls;
   }
 }
+if (!customElements.get("heiman-entity-controls"))
+  customElements.define("heiman-entity-controls", HeimanEntityControls);
 if (!customElements.get("heiman-device-card-editor"))
   customElements.define("heiman-device-card-editor", HeimanCardEditor);
 if (!customElements.get("heiman-device-card"))

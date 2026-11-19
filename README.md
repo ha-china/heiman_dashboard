@@ -15,12 +15,13 @@ HEIMAN product cards for Home Assistant. Install with HACS, search **HEIMAN Dash
 ## Features
 
 - Searchable product presets and Zigbee model aliases; one matching device is selected automatically.
-- Native visual card editor, English and Simplified Chinese, with automatic language selection.
+- Native visual card editor with automatic or explicit language selection: Chinese, English, German, French, Spanish, Italian, Dutch, Portuguese and Polish.
 - Home, fire safety and minimal styles; Home Assistant theme support and responsive layouts.
 - Zigbee2MQTT via MQTT discovery and ZHA via native HA entities.
 - Device-scoped entity matching, including multi-channel switches and logical child endpoints.
 - Distinct alarm, normal, unknown, unavailable, self-test, tamper, fault and low-battery states.
-- Actual measurements and controls only; device settings open the native HA entity dialog.
+- Inline indicator switches, remote self-test, temporary hush, siren start/stop, sound profiles and supported device settings.
+- Unavailable devices are grey and their actuator controls are disabled.
 - One bundled JavaScript file, with no CDN, cloud account or runtime network requests to HEIMAN.
 
 ## Supported devices
@@ -69,19 +70,19 @@ style: home
 
 `device_id` can be omitted when exactly one device matches your model. The visual editor saves the instance when you choose a model with one match. `model: auto` identifies the model of your selected device, or selects the only supported HEIMAN device available. With several matching devices, the card asks you to choose one.
 
-| Option          | Default     | Meaning                                                   |
-| --------------- | ----------- | --------------------------------------------------------- |
-| `model`         | `auto`      | Product preset or recognized Zigbee model alias           |
-| `device_id`     | Automatic   | Device registry ID; use the visual editor to select it    |
-| `style`         | `home`      | `home`, `fire`, `minimal`                                 |
-| `name`          | Device name | Custom title                                              |
-| `language`      | `auto`      | `auto`, `zh`, `en`                                        |
-| `show_battery`  | `true`      | Display battery measurements                              |
-| `show_signal`   | `true`      | Display signal measurements, preserving LQI/dBm units     |
-| `show_controls` | `true`      | Display actual controls and device settings               |
-| `show_details`  | `true`      | Expandable entity readings and diagnostics                |
-| `entity`        | None        | Optional primary entity, also used to identify its device |
-| `entities`      | Automatic   | Advanced role → entity ID overrides                       |
+| Option          | Default     | Meaning                                                      |
+| --------------- | ----------- | ------------------------------------------------------------ |
+| `model`         | `auto`      | Product preset or recognized Zigbee model alias              |
+| `device_id`     | Automatic   | Device registry ID; use the visual editor to select it       |
+| `style`         | `home`      | `home`, `fire`, `minimal`                                    |
+| `name`          | Device name | Custom title                                                 |
+| `language`      | `auto`      | `auto`, `zh`, `en`, `de`, `fr`, `es`, `it`, `nl`, `pt`, `pl` |
+| `show_battery`  | `true`      | Display battery measurements                                 |
+| `show_signal`   | `true`      | Display signal measurements, preserving LQI/dBm units        |
+| `show_controls` | `true`      | Display actual controls and device settings                  |
+| `show_details`  | `true`      | Expandable entity readings and diagnostics                   |
+| `entity`        | None        | Optional primary entity, also used to identify its device    |
+| `entities`      | Automatic   | Advanced role → entity ID overrides                          |
 
 For unusual discovery names, assign entities in the visual editor's **Entity assignments** section. Overrides also allow setup when registry access is unavailable:
 
@@ -96,7 +97,11 @@ entities:
 
 See [src/config.ts](src/config.ts) for supported role names. Alarm roles must reference binary sensors; numeric concentration values are displayed in details and never treated as detector alarm decisions.
 
-Switch and light buttons operate their exact HA entity. Curtain controls call native cover services. Self-test, hush, sirens, firmware, sensitivity and other product-specific settings open HA's more-info dialog and use the capabilities your integration exposes. Disabled or hidden entities are not automatically selected. Sensor values retain the integration's units and HA formatting.
+Switch and light buttons operate their exact HA entity. Curtain controls call native cover services. The card directly exposes indicator switches, self-test buttons, temporary hush, siren start/stop and available select/number settings. Z2M automation sound profiles use the exposed select entity; ZHA sirens use native siren services. Tone, duration and volume fields appear only when the siren advertises those capabilities. Numeric settings respect the entity's range and step.
+
+Buttons that have never been pressed may report `unknown`; they remain usable while the device is available. A successful service request is shown as sent, while the UI waits for the integration to report the actual state. Temporary hush requests silencing; it does not offer an undocumented inverse command. Firmware updates and complex remote functions retain HA's native dialog. Disabled or hidden entities are not automatically selected. Sensor values retain the integration's units and HA formatting.
+
+All nine languages cover the card, editor, statuses and inline controls. `auto` follows the HA user's language, including regional variants such as `de-DE`, `fr-CA` and `pt-PT`. Device names and unknown vendor-defined option names remain as provided by the integration.
 
 ## Troubleshooting
 

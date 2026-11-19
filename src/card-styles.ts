@@ -94,6 +94,9 @@ export const cardStyles = css`
     --status-color: var(--muted);
     --status-bg: var(--tile);
   }
+  ha-card[data-severity="unavailable"] {
+    filter: grayscale(1);
+  }
   ha-card.fire[data-severity="alarm"],
   ha-card[data-dark][data-severity="alarm"] {
     --status-color: #ffaaa0;

@@ -56,10 +56,30 @@ entity("smoke", "sensor", "linkquality", 178, undefined, "lqi");
 entity("smoke", "button", "trigger_selftest", "unknown");
 entity("smoke", "switch", "temporary_mute", "off");
 entities["switch.smoke_temporary_mute"].entity_category = "config";
+entity("smoke", "switch", "heartbeat_indicator", "on");
+entity(
+  "smoke",
+  "select",
+  "siren_for_automation_only",
+  "stop",
+  undefined,
+  undefined,
+  { options: ["stop", "smoke_siren", "co_siren"] },
+);
+entity("smoke", "number", "temperature_offset", "unknown", undefined, "°C", {
+  min: -15,
+  max: 15,
+  step: 0.1,
+});
 entity("co", "binary_sensor", "co", "off", "carbon_monoxide");
 entity("co", "sensor", "battery", 96, "battery", "%");
 entity("co", "sensor", "temperature", 24.1, "temperature", "°C");
 entity("co", "sensor", "rssi", -64, "signal_strength", "dBm");
+entity("co", "siren", "alarm", "off", undefined, undefined, {
+  supported_features: 19,
+});
+entities["siren.co_alarm"].entity_category = "config";
+entity("co", "button", "remote_test", "unknown");
 entity("climate", "sensor", "temperature", 22.8, "temperature", "°C");
 entity("climate", "sensor", "humidity", 54, "humidity", "%");
 entity("climate", "sensor", "battery", 86, "battery", "%");
@@ -111,7 +131,16 @@ function hass() {
           ...states,
           [data.entity_id]: {
             ...states[data.entity_id],
-            state: service === "turn_on" ? "on" : "off",
+            state:
+              service === "select_option"
+                ? String(data.option)
+                : service === "set_value"
+                  ? String(data.value)
+                  : service === "press"
+                    ? new Date().toISOString()
+                    : service === "turn_on"
+                      ? "on"
+                      : "off",
             last_updated: new Date().toISOString(),
           },
         };
@@ -190,6 +219,16 @@ window.heimanDemo = {
   refresh,
   setState(id, state) {
     states = { ...states, [id]: { ...states[id], state } };
+    refresh();
+  },
+  setAttributes(id, attributes) {
+    states = {
+      ...states,
+      [id]: {
+        ...states[id],
+        attributes: { ...states[id].attributes, ...attributes },
+      },
+    };
     refresh();
   },
 };
