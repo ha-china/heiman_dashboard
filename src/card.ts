@@ -245,7 +245,7 @@ export class HeimanDeviceCard extends HeimanElement {
                           this._detailsOpen = false;
                         }}
                       >
-                        ${icon("settings", 13)}${this.t("settings")}
+                        ${icon("settings", 13)}${this.t("device_control")}
                       </button>`
                     : nothing
                 }

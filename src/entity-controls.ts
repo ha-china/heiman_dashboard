@@ -269,7 +269,7 @@ export class HeimanEntityControls extends LitElement {
     const indicators = entries.filter(
       (entry) => settingKind(entry) === "indicator",
     );
-    const advanced = entries.filter(
+    const additional = entries.filter(
       (entry) =>
         !quick.includes(entry) &&
         !sirens.includes(entry) &&
@@ -327,14 +327,7 @@ export class HeimanEntityControls extends LitElement {
         ${quick.length ? html`<div class="quick">${quick.map((entry) => html`<button data-entity=${entry.entity_id} ?disabled=${this.blocked(entry.entity_id) || this.busy(entry.entity_id)} @click=${() => this._send(entry.entity_id, domainOf(entry.entity_id) === "button" ? "press" : "turn_on")}>${icon(settingKind(entry) === "self_test" ? "check" : "bell", 16)}${this.label(entry)}</button>`)}</div>` : nothing}
         ${sirens.map((entry) => this.renderSiren(entry))}
         ${indicators.map((entry) => this.renderSetting(entry))}
-        ${
-          advanced.length
-            ? html`<details class="advanced-settings">
-                <summary>${this.t("more_settings")}</summary>
-                ${advanced.map((entry) => this.renderSetting(entry))}
-              </details>`
-            : nothing
-        }
+        ${additional.map((entry) => this.renderSetting(entry))}
       </div>
       ${this._feedback ? html`<div class=${`feedback${this._failed ? " error" : ""}`} role=${this._failed ? "alert" : "status"}>${this.t(this._pending.size ? "sending" : this._feedback)}</div>` : nothing}
     `;

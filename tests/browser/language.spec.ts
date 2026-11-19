@@ -38,7 +38,9 @@ test("default cards follow HA language changes and use English fallback", async 
     );
     await expect(card).toHaveAttribute("lang", code);
     await expect(card.locator(".status-label")).toHaveText(labels.normal);
-    await expect(card.locator(".settings-toggle")).toHaveText(labels.settings);
+    await expect(card.locator(".settings-toggle")).toHaveText(
+      labels.device_control,
+    );
     await expect(editor.locator('#language option[value="auto"]')).toHaveText(
       labels.follow_system,
     );
@@ -54,7 +56,7 @@ test("default cards follow HA language changes and use English fallback", async 
     card.setConfig({ ...window.heimanDemo.config, language: "en" });
     window.heimanDemo.setLanguage("de-DE");
   });
-  await expect(card.locator(".settings-toggle")).toHaveText("Device settings");
+  await expect(card.locator(".settings-toggle")).toHaveText("Device control");
   await expect(page.locator("#card-co")).toHaveAttribute("lang", "de");
   expect(await page.evaluate(() => window.heimanDemo.calls.length)).toBe(0);
 });

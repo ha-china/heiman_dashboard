@@ -38,7 +38,7 @@ Model selection matches device registry `model_id`, `model` and known Zigbee ali
 
 All three styles use a compact layout. A small product drawing sits beside the name, status appears once and measurements share a readings strip. The MQTT/ZHA badge sits beside HEIMAN, while the header timestamp provides a full date tooltip. The bottom action row appears only when settings or details are available.
 
-Settings and details start collapsed and open one at a time. The settings component stays mounted to retain drafts and pending service requests. Detector alarms expose the available hush action immediately, and a siren reported as sounding exposes its supported stop action even when settings are collapsed. An unknown siren state is never interpreted as sounding.
+Device control and details start collapsed and open one at a time. Device control contains quick actions, sirens, indicators and all remaining configuration fields in one panel; additional settings have no separate expander. The control component stays mounted to retain drafts and pending service requests. Detector alarms expose the available hush action immediately, and a siren reported as sounding exposes its supported stop action even when controls are collapsed. An unknown siren state is never interpreted as sounding.
 
 ## Z2M and ZHA adaptation
 

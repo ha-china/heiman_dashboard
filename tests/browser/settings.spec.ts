@@ -146,7 +146,6 @@ test("number settings submit valid numeric data and surface service failures", a
   page,
 }) => {
   const controls = page.locator("#card-smoke heiman-entity-controls");
-  await controls.locator(".advanced-settings summary").click();
   await controls.getByLabel("Temperature offset", { exact: true }).fill("16");
   await controls.getByRole("button", { name: "Apply", exact: true }).click();
   await expect(controls.getByRole("alert")).toContainText(
