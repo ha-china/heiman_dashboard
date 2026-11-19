@@ -38,6 +38,8 @@ heiman_dashboard/
 
 卡片的 `getCardSize()` 和 `getGridOptions()` 支持 masonry 与 sections 布局。未知型号会在 `setConfig()` 中报错，避免以错误设备模板显示。
 
+三种样式采用紧凑布局：小尺寸产品示意图与名称并排，状态仅展示一次，测量值共用读数栏。来源、更新时间、设置和详情入口合并到底栏。设置与详情默认收起、互斥展开；设置组件保留在 DOM 中以保存草稿及未完成的服务请求。报警消音和正在发声的 siren 停止按钮可在收起状态直接使用，仍按真实能力与上报状态判断，不把未知状态当作发声。
+
 ## Z2M 和 ZHA 适配
 
 两者统一通过 HA 设备、实体注册表和 `hass.states` 读取，不直接访问 MQTT 或 Zigbee 协议。优先使用 HA 已加载的 `hass.devices` 和 `hass.entities`；未加载时使用 HA WebSocket 的设备与实体列表接口。请求按 HA 连接共享，失败时可重试，组件断开后丢弃过期结果。

@@ -5,6 +5,7 @@
 - Add HEIMAN Dashboard card discovery and a native visual configuration editor.
 - Add 83 product presets from pinned Z2M metadata, including 10 with explicit ZHA quirk evidence.
 - Add home, fire safety and minimal styles, English/Chinese localization and responsive layouts.
+- Compact all three styles with merged status/readings, smaller illustrations and on-demand settings/details; keep alarm hush and active siren stop actions immediately available.
 - Match device-scoped entities, logical child endpoints and multi-channel controls.
 - Recognize ZHA's generic IAS zone for known heat alarm models.
 - Update cards only when their device entities or shared display settings change, and index product aliases for larger installations.

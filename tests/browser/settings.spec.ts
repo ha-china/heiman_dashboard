@@ -15,6 +15,8 @@ declare global {
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#card-smoke .status-label")).toHaveText("正常");
+  await page.locator("#card-smoke .settings-toggle").click();
+  await page.locator("#card-co .settings-toggle").click();
 });
 test("self-test, temporary hush and indicator controls issue exact device services", async ({
   page,

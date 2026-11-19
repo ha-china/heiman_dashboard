@@ -26,6 +26,8 @@ export class HeimanEntityControls extends LitElement {
     entities: { attribute: false },
     language: { attribute: false },
     disabled: { type: Boolean },
+    expanded: { type: Boolean },
+    urgent: { type: Boolean },
     _pending: { state: true },
     _feedback: { state: true },
     _failed: { state: true },
@@ -34,6 +36,8 @@ export class HeimanEntityControls extends LitElement {
   entities: RegistryEntity[] = [];
   language: Language = "en";
   disabled = false;
+  expanded = true;
+  urgent = false;
   private _pending = new Map<string, number>();
   private _feedback?: TranslationKey;
   private _failed = false;
@@ -43,12 +47,31 @@ export class HeimanEntityControls extends LitElement {
   static styles = css`
     :host {
       display: block;
-      margin-top: 14px;
       font: inherit;
       color: var(--ink);
     }
     * {
       box-sizing: border-box;
+    }
+    [hidden] {
+      display: none !important;
+    }
+    .full {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      margin-top: 4px;
+    }
+    .emergency {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 4px 0 6px;
+    }
+    .emergency button {
+      flex: 1;
+      border-color: var(--status-color);
+      color: var(--status-color);
+      background: var(--status-bg);
     }
     button,
     input,
@@ -252,18 +275,67 @@ export class HeimanEntityControls extends LitElement {
         !sirens.includes(entry) &&
         !indicators.includes(entry),
     );
+    const sounding = sirens.filter((entry) => {
+      const state = this.hass!.states[entry.entity_id];
+      if (domainOf(entry.entity_id) === "siren") return isActive(state);
+      return (
+        Array.isArray(state.attributes.options) &&
+        state.attributes.options.includes(state.state) &&
+        !["stop", "off"].includes(state.state.toLowerCase())
+      );
+    });
+    const hush = this.urgent
+      ? quick.filter((entry) => settingKind(entry) === "mute")
+      : [];
     return html`
-      ${quick.length ? html`<div class="quick">${quick.map((entry) => html`<button data-entity=${entry.entity_id} ?disabled=${this.blocked(entry.entity_id) || this.busy(entry.entity_id)} @click=${() => this._send(entry.entity_id, domainOf(entry.entity_id) === "button" ? "press" : "turn_on")}>${icon(settingKind(entry) === "self_test" ? "check" : "bell", 16)}${this.label(entry)}</button>`)}</div>` : nothing}
-      ${sirens.map((entry) => this.renderSiren(entry))}
-      ${indicators.map((entry) => this.renderSetting(entry))}
       ${
-        advanced.length
-          ? html`<details class="advanced-settings">
-              <summary>${this.t("more_settings")}</summary>
-              ${advanced.map((entry) => this.renderSetting(entry))}
-            </details>`
+        !this.expanded && (sounding.length || hush.length)
+          ? html`<div class="emergency">
+              ${hush.map((entry) => html`<button data-entity=${entry.entity_id} ?disabled=${this.blocked(entry.entity_id) || this.busy(entry.entity_id)} @click=${() => this._send(entry.entity_id, domainOf(entry.entity_id) === "button" ? "press" : "turn_on")}>${icon("bell", 14)}${this.label(entry)}</button>`)}${sounding.map(
+                (entry) => {
+                  const state = this.hass!.states[entry.entity_id];
+                  if (domainOf(entry.entity_id) === "siren")
+                    return Number(state.attributes.supported_features) & 2
+                      ? html`<button
+                          class="emergency-stop"
+                          data-entity=${entry.entity_id}
+                          ?disabled=${this.blocked(entry.entity_id)}
+                          @click=${() => this._send(entry.entity_id, "turn_off", {}, true)}
+                        >
+                          ${icon("stop", 14)}${this.t("siren_off")}
+                        </button>`
+                      : nothing;
+                  const stop = (state.attributes.options as string[]).find(
+                    (option) => ["stop", "off"].includes(option.toLowerCase()),
+                  );
+                  return stop
+                    ? html`<button
+                        class="emergency-stop"
+                        data-entity=${entry.entity_id}
+                        ?disabled=${this.blocked(entry.entity_id)}
+                        @click=${() => this._send(entry.entity_id, "select_option", { option: stop }, true)}
+                      >
+                        ${icon("stop", 14)}${this.t("siren_off")}
+                      </button>`
+                    : nothing;
+                },
+              )}
+            </div>`
           : nothing
       }
+      <div class="full" ?hidden=${!this.expanded}>
+        ${quick.length ? html`<div class="quick">${quick.map((entry) => html`<button data-entity=${entry.entity_id} ?disabled=${this.blocked(entry.entity_id) || this.busy(entry.entity_id)} @click=${() => this._send(entry.entity_id, domainOf(entry.entity_id) === "button" ? "press" : "turn_on")}>${icon(settingKind(entry) === "self_test" ? "check" : "bell", 16)}${this.label(entry)}</button>`)}</div>` : nothing}
+        ${sirens.map((entry) => this.renderSiren(entry))}
+        ${indicators.map((entry) => this.renderSetting(entry))}
+        ${
+          advanced.length
+            ? html`<details class="advanced-settings">
+                <summary>${this.t("more_settings")}</summary>
+                ${advanced.map((entry) => this.renderSetting(entry))}
+              </details>`
+            : nothing
+        }
+      </div>
       ${this._feedback ? html`<div class=${`feedback${this._failed ? " error" : ""}`} role=${this._failed ? "alert" : "status"}>${this.t(this._pending.size ? "sending" : this._feedback)}</div>` : nothing}
     `;
   }

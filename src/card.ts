@@ -13,9 +13,13 @@ export class HeimanDeviceCard extends HeimanElement {
   static properties = {
     _busy: { state: true },
     _serviceError: { state: true },
+    _settingsOpen: { state: true },
+    _detailsOpen: { state: true },
   };
   private _busy = false;
   private _serviceError = false;
+  private _settingsOpen = false;
+  private _detailsOpen = false;
   private _watchedEntities = new Set<string>();
 
   protected shouldUpdate(changed: PropertyValues): boolean {
@@ -46,10 +50,10 @@ export class HeimanDeviceCard extends HeimanElement {
     return { type: "custom:heiman-device-card", model: "auto", style: "home" };
   }
   getCardSize(): number {
-    return 7;
+    return 3;
   }
   getGridOptions(): object {
-    return { columns: 6, rows: "auto", min_columns: 3 };
+    return { columns: 12, rows: "auto", min_columns: 6 };
   }
 
   protected render() {
@@ -108,6 +112,7 @@ export class HeimanDeviceCard extends HeimanElement {
     const metrics = metricRoles.flatMap((role) =>
       bindings[role]?.[0] ? [{ role, id: bindings[role]![0] }] : [],
     );
+    const metricColumns = metrics.length === 4 ? 2 : Math.min(metrics.length, 3);
     const controls =
       this._config.show_controls !== false
         ? (bindings.control ?? []).filter((id) => domainOf(id) !== "siren")
@@ -160,74 +165,117 @@ export class HeimanDeviceCard extends HeimanElement {
           ><span class="model">${preset.id}</span>
         </div>
         <div class="heading">
-          <div>
-            <h2>${title}</h2>
+          ${primary ? html`<button class="illustration icon-button" aria-label=${this.t("more_info")} @click=${() => this._moreInfo(primary)}>${deviceDrawing(preset.kind)}</button>` : html`<div class="illustration">${deviceDrawing(preset.kind)}</div>`}
+          <div class="identity">
+            <h2 title=${title}>${title}</h2>
             <div class="subheading">
               ${[area, this.t(preset.kind)].filter(Boolean).join(" · ")}
             </div>
           </div>
-          ${primary ? html`<button class="icon-button" aria-label=${this.t("more_info")} @click=${() => this._moreInfo(primary)}>${icon("info")}</button>` : nothing}
         </div>
-        <div class="hero" role="status" aria-live="polite" aria-atomic="true">
-          <div class="illustration">${deviceDrawing(preset.kind)}</div>
+        <div
+          class="overview"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <div class="status">
-            <div class="status-label">${this.t(status.key)}</div>
-            <div class="status-caption">
-              <span class="dot"></span>${this.t(preset.kind)}
-            </div>
-            <div class="status-tag">
-              ${icon(status.severity === "alarm" || status.severity === "warning" ? "alert" : status.severity === "normal" ? "check" : KIND_ICONS[preset.kind], 13)}${status.severity === "normal" ? this.t("tracking") : this.t(status.key)}
-            </div>
+            ${icon(status.severity === "alarm" || status.severity === "warning" ? "alert" : status.severity === "normal" ? "check" : KIND_ICONS[preset.kind], 14)}<span
+              class="status-label"
+              >${this.t(status.key)}</span
+            >
           </div>
+          ${status.alerts.length ? html`<div class="alerts">${status.alerts.map((role) => html`<span class="alert">${this.t(role)}</span>`)}</div>` : nothing}
+          ${status.partial ? html`<span class="partial">${this.t("partial")}</span>` : nothing}
         </div>
-        ${status.alerts.length ? html`<div class="alerts">${status.alerts.map((role) => html`<span class="alert">${icon("alert", 14)}${this.t(role)}</span>`)}</div>` : nothing}
         ${
           metrics.length
-            ? html`<div class="metrics">
+            ? html`<div
+                class="metrics"
+                style=${`--metric-columns: ${metricColumns}`}
+              >
                 ${metrics.map(
-                  ({ role, id }) =>
+                  ({ role, id }, index) =>
                     html` <button
                       class="metric"
                       @click=${() => this._moreInfo(id)}
                       aria-label=${`${this.t(role)}: ${this._display(hass.states[id])}`}
+                      title=${`${this.t(role)}: ${this._display(hass.states[id])}`}
+                      style=${index === metrics.length - 1 && metrics.length % metricColumns ? `grid-column: span ${metricColumns - (metrics.length % metricColumns) + 1}` : nothing}
                     >
                       <span class="metric-label"
                         >${icon(this._metricIcon(role), 15)}${this.t(role)}</span
                       >
                       <span class="metric-value"
-                        >${this._display(hass.states[id])}</span
+                        >${unavailable(hass.states[id]) ? "—" : this._display(hass.states[id])}</span
                       >
                     </button>`,
                 )}
               </div>`
             : nothing
         }
-        ${status.partial ? html`<p class="partial">${this.t("partial")}</p>` : nothing}
         ${controls.length ? html`<div class="actions">${controls.map((id) => this._renderControl(id))}</div>` : nothing}
+        <div class="footer">
+          <span
+            class="stamp"
+            title=${date ? `${this.t("updated")} ${date.toLocaleString(languageFor(this._config, hass))}` : this.t("not_reported")}
+          >
+            ${source || "Home Assistant"}${updated ? ` · ${updated}` : ""}
+          </span>
+          ${
+            this._config.show_controls !== false && settings.length
+              ? html`<button
+                  class="panel-toggle settings-toggle"
+                  aria-expanded=${this._settingsOpen}
+                  aria-controls="device-settings"
+                  @click=${() => {
+                    this._settingsOpen = !this._settingsOpen;
+                    this._detailsOpen = false;
+                  }}
+                >
+                  ${icon("settings", 13)}${this.t("settings")}
+                </button>`
+              : nothing
+          }
+          ${
+            this._config.show_details !== false && details.length
+              ? html`<button
+                  class="panel-toggle details-toggle"
+                  aria-expanded=${this._detailsOpen}
+                  aria-controls="entity-readings"
+                  @click=${() => {
+                    this._detailsOpen = !this._detailsOpen;
+                    this._settingsOpen = false;
+                  }}
+                >
+                  ${this.t("details")}${icon("chevron", 12)}
+                </button>`
+              : nothing
+          }
+        </div>
         ${
           this._config.show_controls !== false && settings.length
             ? html`<heiman-entity-controls
+                id="device-settings"
                 .hass=${hass}
                 .entities=${settings}
                 .language=${languageFor(this._config, hass)}
                 .disabled=${status.severity === "unavailable"}
+                .expanded=${this._settingsOpen}
+                .urgent=${status.severity === "alarm"}
               ></heiman-entity-controls>`
             : nothing
         }
         ${this._serviceError ? html`<div class="error" role="alert">${this.t("service_error")}</div>` : nothing}
-        <div class="footer">
-          <span>${source || "Home Assistant"}</span
-          ><span
-            title=${date?.toLocaleString(languageFor(this._config, hass)) ?? ""}
-            >${updated ? `${this.t("updated")} ${updated}` : this.t("not_reported")}</span
-          >
-        </div>
         ${
           this._config.show_details !== false && details.length
-            ? html`<details class="readings">
-                <summary>${this.t("details")} · ${details.length}</summary>
+            ? html`<div
+                class="readings"
+                id="entity-readings"
+                ?hidden=${!this._detailsOpen}
+              >
                 ${details.map((id) => this._entityRow(id))}
-              </details>`
+              </div>`
             : nothing
         }
       </div>

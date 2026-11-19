@@ -3,7 +3,6 @@ import { css } from "lit";
 export const cardStyles = css`
   :host {
     display: block;
-    height: 100%;
     font-family: var(
       --paper-font-body1_-_font-family,
       -apple-system,
@@ -30,7 +29,6 @@ export const cardStyles = css`
     --status-bg: #e6eee3;
     display: block;
     min-width: 0;
-    height: 100%;
     overflow: hidden;
     color: var(--ink);
     background: var(--surface);
@@ -127,58 +125,62 @@ export const cardStyles = css`
     outline-offset: 3px;
   }
   .body {
-    padding: 22px 22px 18px;
+    padding: 14px 16px 8px;
   }
   .top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .brand {
-    font-size: 12px;
+    font-size: 9px;
     font-weight: 800;
-    letter-spacing: 2.4px;
+    letter-spacing: 1.7px;
     color: var(--accent);
   }
   .model {
-    border: 1px solid var(--line);
-    padding: 4px 8px;
     font-size: 10px;
-    letter-spacing: 0.4px;
-    border-radius: 6px;
     color: var(--muted);
-    max-width: 68%;
+    text-align: right;
+    min-width: 0;
     overflow-wrap: anywhere;
   }
   .heading {
-    margin-top: 17px;
+    margin-top: 9px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
+  }
+  .identity {
+    min-width: 0;
+    flex: 1;
   }
   h2 {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
-    letter-spacing: -0.4px;
+    letter-spacing: -0.2px;
     margin: 0;
     overflow-wrap: anywhere;
     line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .subheading {
-    margin-top: 5px;
+    margin-top: 3px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 11px;
     overflow-wrap: anywhere;
   }
   .icon-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: 10px;
     background: transparent;
     color: var(--muted);
     flex-shrink: 0;
@@ -186,16 +188,16 @@ export const cardStyles = css`
   .icon-button:hover {
     background: var(--tile);
   }
-  .hero {
+  .overview {
     display: flex;
     align-items: center;
-    min-height: 145px;
-    gap: 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 9px;
   }
   .illustration {
-    width: 124px;
-    flex: 0 0 124px;
-    margin-left: -8px;
+    width: 48px;
+    flex: 0 0 48px;
   }
   .product {
     display: block;
@@ -203,31 +205,6 @@ export const cardStyles = css`
   }
   .status {
     min-width: 0;
-  }
-  .status-label {
-    font-size: 27px;
-    letter-spacing: -0.8px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--status-color);
-    overflow-wrap: anywhere;
-  }
-  .status-caption {
-    color: var(--muted);
-    margin-top: 7px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .dot {
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: var(--status-color);
-  }
-  .status-tag {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -235,19 +212,32 @@ export const cardStyles = css`
     border-radius: 6px;
     background: var(--status-bg);
     color: var(--status-color);
-    font-size: 11px;
-    margin-top: 9px;
+  }
+  .status-label {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--status-color);
+    overflow-wrap: anywhere;
+  }
+  ha-card[data-severity="alarm"] {
+    border-color: var(--status-color);
+    box-shadow: inset 3px 0 var(--status-color);
   }
   .metrics {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(var(--metric-columns), minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 10px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
   }
   .metric {
     border: 0;
-    border-radius: 11px;
     text-align: left;
-    padding: 12px;
+    padding: 7px 8px;
     background: var(--tile);
     min-width: 0;
   }
@@ -257,23 +247,27 @@ export const cardStyles = css`
   .metric-label {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 11px;
+    gap: 4px;
+    font-size: 10px;
     color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+  .metric-label svg {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
   }
   .metric-value {
     display: block;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 500;
-    margin-top: 7px;
-    letter-spacing: -0.5px;
+    margin-top: 3px;
     overflow-wrap: anywhere;
   }
   .alerts {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: wrap;
-    margin-bottom: 12px;
   }
   .alert {
     display: inline-flex;
@@ -281,23 +275,23 @@ export const cardStyles = css`
     align-items: center;
     color: var(--status-color);
     background: var(--status-bg);
-    padding: 5px 8px;
+    padding: 4px 7px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
+    gap: 6px;
+    margin-top: 8px;
   }
   .action {
     display: inline-flex;
     justify-content: center;
     align-items: center;
     gap: 6px;
-    min-height: 42px;
-    padding: 8px 12px;
+    min-height: 36px;
+    padding: 6px 8px;
     background: transparent;
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -308,27 +302,45 @@ export const cardStyles = css`
     background: var(--tile);
   }
   .footer {
-    border-top: 1px solid var(--line);
-    margin-top: 16px;
-    padding-top: 12px;
+    margin-top: 5px;
     color: var(--muted);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    gap: 4px;
+    flex-wrap: wrap;
     font-size: 10px;
   }
-  .footer span {
+  .stamp {
+    margin-right: auto;
+    padding: 8px 0;
     overflow-wrap: anywhere;
   }
-  details {
-    margin-top: 12px;
-    font-size: 12px;
-  }
-  summary {
-    cursor: pointer;
+  .panel-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    border-radius: 6px;
+    min-height: 36px;
+    padding: 6px;
+    font-size: 11px;
     color: var(--muted);
-    padding: 7px 0;
+  }
+  .panel-toggle:hover,
+  .panel-toggle[aria-expanded="true"] {
+    color: var(--accent);
+    background: var(--tile);
+  }
+  .details-toggle[aria-expanded="true"] svg {
+    transform: rotate(90deg);
+  }
+  [hidden] {
+    display: none !important;
+  }
+  .readings {
+    padding-top: 4px;
   }
   .entity-row {
     display: flex;
@@ -366,15 +378,8 @@ export const cardStyles = css`
     margin-top: 10px;
   }
   .partial {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--muted);
-    margin: 10px 0 0;
-  }
-  @container (max-width: 280px) {
-    .illustration {
-      width: 90px;
-      flex-basis: 90px;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     * {
