@@ -5,17 +5,22 @@ export const CATALOG = data.models as DevicePreset[];
 export const CATALOG_SNAPSHOT = data.generatedOn;
 export const normalizeModel = (value: string): string =>
   value.toLowerCase().replace(/[\s-]+/g, "");
+const presetsById = new Map(
+  CATALOG.map((preset) => [normalizeModel(preset.id), preset]),
+);
+const presetsByAlias = new Map<string, DevicePreset>();
+for (const preset of CATALOG) {
+  for (const alias of preset.aliases) {
+    const key = normalizeModel(alias);
+    if (!presetsByAlias.has(key)) presetsByAlias.set(key, preset);
+  }
+}
 export function findPreset(value?: string | null): DevicePreset | undefined {
   if (!value || value === "auto") return undefined;
   const parentheticalId = value.match(/\(([^()]+)\)\s*$/)?.[1];
   const normalized = normalizeModel(parentheticalId ?? value);
   // Canonical IDs take priority over aliases. Avoid substring matches between variants.
-  return (
-    CATALOG.find((preset) => normalizeModel(preset.id) === normalized) ??
-    CATALOG.find((preset) =>
-      preset.aliases.some((alias) => normalizeModel(alias) === normalized),
-    )
-  );
+  return presetsById.get(normalized) ?? presetsByAlias.get(normalized);
 }
 export function presetForDevice(
   device: RegistryDevice,

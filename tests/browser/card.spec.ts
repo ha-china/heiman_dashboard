@@ -425,3 +425,59 @@ test("multi-channel controls address each entity and covers honor supported feat
     data: { entity_id: "cover.curtain" },
   });
 });
+test("unrelated HA state changes do not redraw cards, while bound state changes do", async ({
+  page,
+}) => {
+  await ready(page);
+  const result = await page.evaluate(async () => {
+    const card = document.querySelector(
+      "#card-smoke",
+    ) as HTMLElementTagNameMap["heiman-device-card"];
+    const initial = window.heimanDemo.hass;
+    card.hass = initial;
+    await card.updateComplete;
+    await card.updateComplete;
+    let renders = 0;
+    card.addController({
+      hostUpdated() {
+        renders++;
+      },
+    });
+    for (let i = 0; i < 20; i++) {
+      card.hass = {
+        ...initial,
+        states: {
+          ...initial.states,
+          "sensor.unrelated": {
+            entity_id: "sensor.unrelated",
+            state: String(i),
+            attributes: {},
+          },
+        },
+      };
+      await card.updateComplete;
+    }
+    const unrelated = renders;
+    card.hass = {
+      ...initial,
+      states: {
+        ...initial.states,
+        "binary_sensor.smoke_smoke": {
+          ...initial.states["binary_sensor.smoke_smoke"],
+          state: "on",
+        },
+      },
+    };
+    await card.updateComplete;
+    const related = renders;
+    card.hass = { ...card.hass, themes: { darkMode: true } };
+    await card.updateComplete;
+    return { unrelated, related, theme: renders };
+  });
+  expect(result).toEqual({ unrelated: 0, related: 1, theme: 2 });
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("报警");
+  await expect(page.locator("#card-smoke ha-card")).toHaveAttribute(
+    "data-dark",
+    "",
+  );
+});

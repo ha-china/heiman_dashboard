@@ -1,4 +1,4 @@
-import { html, nothing } from "lit";
+import { html, nothing, type PropertyValues } from "lit";
 import { HeimanElement } from "./base";
 import { cardStyles } from "./card-styles";
 import { CATALOG, KIND_ICONS } from "./catalog";
@@ -6,7 +6,7 @@ import { configurationEntities, domainOf, resolveDevice } from "./entities";
 import { icon, deviceDrawing } from "./icons";
 import { languageFor, type TranslationKey } from "./i18n";
 import { formatState, summarize, unavailable } from "./state";
-import type { CardConfig, EntityState, Role } from "./types";
+import type { CardConfig, EntityState, HomeAssistant, Role } from "./types";
 
 export class HeimanDeviceCard extends HeimanElement {
   static styles = cardStyles;
@@ -16,6 +16,28 @@ export class HeimanDeviceCard extends HeimanElement {
   };
   private _busy = false;
   private _serviceError = false;
+  private _watchedEntities = new Set<string>();
+
+  protected shouldUpdate(changed: PropertyValues): boolean {
+    if (changed.size !== 1 || !changed.has("hass")) return true;
+    const previous = changed.get("hass") as HomeAssistant | undefined;
+    const current = this.hass;
+    if (!previous || !current) return true;
+    for (const key of [
+      "devices",
+      "entities",
+      "areas",
+      "locale",
+      "language",
+      "themes",
+      "connection",
+    ] as const) {
+      if (previous[key] !== current[key]) return true;
+    }
+    return [...this._watchedEntities].some(
+      (id) => previous.states[id] !== current.states[id],
+    );
+  }
 
   static getConfigElement(): HTMLElement {
     return document.createElement("heiman-device-card-editor");
@@ -35,6 +57,10 @@ export class HeimanDeviceCard extends HeimanElement {
     if (!hass) return nothing;
     const resolution = resolveDevice(this._config, hass, this._registry);
     const { device, preset, bindings, entities, reason } = resolution;
+    this._watchedEntities = new Set([
+      ...entities.map((entity) => entity.entity_id),
+      ...Object.values(bindings).flatMap((ids) => ids ?? []),
+    ]);
     const theme = this._config.style ?? "home";
     const hasBindings = Object.values(bindings).some((ids) => ids?.length);
     if (reason || !preset || (!device && !hasBindings))
