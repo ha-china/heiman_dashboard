@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — Unreleased
+## 0.1.0 — 2026-11-19
 
 - Verify published release metadata and installation asset contents, and run HACS checks directly after automated publication.
 - Validate release versions, locale resources, standalone packaging and documentation links in CI; gate publication on HACS checks and mark prerelease tags correctly.
