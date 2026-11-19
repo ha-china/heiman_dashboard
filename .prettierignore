@@ -1,0 +1,7 @@
+dist/
+package-lock.json
+src/data/catalog.json
+docs/SUPPORTED_DEVICES.md
+image/
+LICENSE
+NOTICE

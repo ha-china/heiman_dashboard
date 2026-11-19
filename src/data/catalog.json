@@ -1,0 +1,900 @@
+{
+  "generatedOn": "2026-11-19",
+  "sources": {
+    "z2m": {
+      "repository": "Koenkk/zigbee-herdsman-converters",
+      "branch": "master",
+      "commit": "6cc34894cfcc289f67c0ac7c3ccf42e14be7f8dc",
+      "url": "https://github.com/Koenkk/zigbee-herdsman-converters/tree/6cc34894cfcc289f67c0ac7c3ccf42e14be7f8dc"
+    },
+    "zha": {
+      "repository": "zigpy/zha-device-handlers",
+      "branch": "dev",
+      "commit": "b07fa76876e081d48744968f9fb806e7f1fee0ee",
+      "url": "https://github.com/zigpy/zha-device-handlers/tree/b07fa76876e081d48744968f9fb806e7f1fee0ee"
+    }
+  },
+  "models": [
+    {
+      "id": "HS1MIS-3.0",
+      "description": "Smart occupancy sensor",
+      "kind": "motion",
+      "aliases": [
+        "PIRILLSensor-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CA-M",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [
+        "CO_V15",
+        "CO_YDLV10",
+        "CO_V16",
+        "1ccaa94c49a84abaa9e38687913947ba",
+        "CO_CTPG"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "smoke.py"
+      ]
+    },
+    {
+      "id": "HS-720ES-ZB",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [
+        "JM720ES-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS3MS",
+      "description": "Smart motion sensor",
+      "kind": "motion",
+      "aliases": [
+        "PIRSensor-N",
+        "PIRSensor-N-3.0",
+        "PIRSensor-EM",
+        "PIRSensor-EF-3.0",
+        "PIR_TPV13"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SK",
+      "description": "Smart metering plug",
+      "kind": "plug",
+      "aliases": [
+        "SmartPlug",
+        "SmartPlug-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SK_nxp",
+      "description": "Smart metering plug",
+      "kind": "plug",
+      "aliases": [
+        "SmartPlug-N"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1SA-E",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [
+        "SMOK_V16",
+        "SMOK_V15",
+        "b5db59bfd81e4f1f95dc57fdbba17931",
+        "98293058552c49f38ad0748541ee96ba",
+        "SMOK_YDLV10",
+        "FB56-SMF02HM1.4",
+        "SmokeSensor-N-3.0",
+        "319fa36e7384414a9ea62cba8f6e7626",
+        "c3442b4ac59b4ba1a83119d938f283ab",
+        "SmokeSensor-EF-3.0",
+        "SMOK_HV14",
+        "SMOK_YDLV10N"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "smoke.py"
+      ]
+    },
+    {
+      "id": "HS3SA/HS1SA",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [
+        "SmokeSensor-N",
+        "SmokeSensor-EM",
+        "HS3SA",
+        "HS1SA"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "smoke.py"
+      ]
+    },
+    {
+      "id": "HS2SA-EF-3.0",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS3CG",
+      "description": "Combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "GASSensor-N",
+        "GASSensor-N-3.0",
+        "d90d7c61c44d468a8e906ca0841e0a0c"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG-M",
+      "description": "Combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "GASSensor-EN"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG_H",
+      "description": "Smart combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "HY0022"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG",
+      "description": "Smart combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "RH3070"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG_M",
+      "description": "Combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "GAS_V15"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS3DS",
+      "description": "Door sensor",
+      "kind": "contact",
+      "aliases": [
+        "DoorSensor-N",
+        "DoorSensor-N-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS8DS-EFA",
+      "description": "Door sensor",
+      "kind": "contact",
+      "aliases": [
+        "HS8DS-EF2-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "D1-EFA",
+      "description": "Smart door sensor",
+      "kind": "contact",
+      "aliases": [
+        "D1-EF2-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "D1-E",
+      "description": "Smart door sensor",
+      "kind": "contact",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1DS",
+      "description": "Door sensor",
+      "kind": "contact",
+      "aliases": [
+        "DoorSensor-EM",
+        "DoorSensor-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "Heiman-M1",
+      "description": "Door sensor",
+      "kind": "contact",
+      "aliases": [
+        "DOOR_TPV13",
+        "DOOR_TPV12"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1WL/HS3WL",
+      "description": "Water leakage sensor",
+      "kind": "leak",
+      "aliases": [
+        "WaterSensor-N",
+        "WaterSensor-EM",
+        "WaterSensor-N-3.0",
+        "WaterSensor-EF-3.0",
+        "WATER_TPV13",
+        "TY0207",
+        "HS1WL",
+        "HS3WL"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2WL",
+      "description": "Water leakage sensor",
+      "kind": "leak",
+      "aliases": [
+        "WaterSensor2-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "L1-E",
+      "description": "Smart Water leakage sensor",
+      "kind": "leak",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1RC-N",
+      "description": "Smart remote controller",
+      "kind": "remote",
+      "aliases": [
+        "RC-N"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HM1RC-2-E",
+      "description": "Smart remote controller",
+      "kind": "remote",
+      "aliases": [
+        "RC-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1RC-EM",
+      "description": "Smart remote controller",
+      "kind": "remote",
+      "aliases": [
+        "RC-EM"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CA-E",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [
+        "COSensor-EM",
+        "COSensor-N",
+        "COSensor-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2WD-E",
+      "description": "Smart siren",
+      "kind": "siren",
+      "aliases": [
+        "WarningDevice",
+        "WarningDevice-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1HT",
+      "description": "Smart temperature & humidity Sensor",
+      "kind": "climate",
+      "aliases": [
+        "HT-EM",
+        "TH-EM",
+        "TH-T_V14"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1HT-N",
+      "description": "Smart temperature & humidity Sensor",
+      "kind": "climate",
+      "aliases": [
+        "HT-N",
+        "HT-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2ESK-E",
+      "description": "Smart in wall plug",
+      "kind": "plug",
+      "aliases": [
+        "E_Socket",
+        "E8331510SSZB_C1"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1EB/HS1EB-E",
+      "description": "Smart emergency button",
+      "kind": "remote",
+      "aliases": [
+        "SOS-EM",
+        "SOS-EF-3.0",
+        "HS1EB",
+        "HS1EB-E"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SS",
+      "description": "Smart scene switch",
+      "kind": "remote",
+      "aliases": [
+        "SceneSwitch-EM-3.0",
+        "SceneSwitch-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2WDSC-E",
+      "description": "Remote dimmer and temperature control",
+      "kind": "remote",
+      "aliases": [
+        "TempDimmerSw-EM-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2WDSR-E",
+      "description": "Remote dimmer and color control",
+      "kind": "remote",
+      "aliases": [
+        "ColorDimmerSw-EM-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS3HT",
+      "description": "Temperature & humidity sensor with display",
+      "kind": "climate",
+      "aliases": [
+        "HS3HT-EFA-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "H1-E",
+      "description": "Smart Temperature & humidity sensor",
+      "kind": "climate",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG-E",
+      "description": "Combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "GASSensor-EM",
+        "358e4e3e03c644709905034dae81433e"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1CG-E_3.0",
+      "description": "Combustible gas sensor",
+      "kind": "gas",
+      "aliases": [
+        "GASSensor-EFR-3.0",
+        "GASSensor-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1VS-N",
+      "description": "Vibration sensor",
+      "kind": "vibration",
+      "aliases": [
+        "Vibration-N"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1VS-EF",
+      "description": "Vibration sensor",
+      "kind": "vibration",
+      "aliases": [
+        "Vibration-EF_3.0",
+        "Vibration-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2AQ-EM",
+      "description": "Air quality monitor",
+      "kind": "air",
+      "aliases": [
+        "HS2AQ-EM-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1IRC",
+      "description": "Smart IR Control",
+      "kind": "remote",
+      "aliases": [
+        "IRControl-EM"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2IRC",
+      "description": "Smart IR Control",
+      "kind": "remote",
+      "aliases": [
+        "IRControl2-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SW1A/HS2SW1A-N",
+      "description": "Smart switch - 1 gang with neutral wire",
+      "kind": "switch",
+      "aliases": [
+        "HS2SW1L-EF-3.0",
+        "HS2SW1L-EFR-3.0",
+        "HS2SW1A-N",
+        "HS6SW1A-W-EF-3.0",
+        "HS5SW1A-W-EF-3.0",
+        "HS2SW1A-EF-3.0",
+        "HS2SW1A-EFR-3.0",
+        "HS2SW1A"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SW2A/HS2SW2A-N",
+      "description": "Smart switch - 2 gang with neutral wire",
+      "kind": "switch",
+      "aliases": [
+        "HS2SW2L-EF-3.0",
+        "HS2SW2L-EFR-3.0",
+        "HS2SW2A-N",
+        "HS6SW2A-W-EF-3.0",
+        "HS5SW2A-W-EF-3.0",
+        "RT0102",
+        "HS2SW2A-EF-3.0",
+        "HS2SW2A-EFR-3.0",
+        "HS2SW2A"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SW3A/HS2SW3A-N",
+      "description": "Smart switch - 3 gang with neutral wire",
+      "kind": "switch",
+      "aliases": [
+        "HS2SW3L-EF-3.0",
+        "HS2SW3L-EFR-3.0",
+        "HS2SW3A-N",
+        "HS6SW3A-W-EF-3.0",
+        "HS5SW3A-W-EF-3.0",
+        "HS2SW3A-EF-3.0",
+        "HS2SW3A-EFR-3.0",
+        "HS2SW3A"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1RM-E",
+      "description": "Smart relay module - 2 gang with neutral wire",
+      "kind": "switch",
+      "aliases": [
+        "RelayModule-EF-3.0"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "hs1rm_e.py"
+      ]
+    },
+    {
+      "id": "HS2WDS",
+      "description": "LED 9W CCT E27",
+      "kind": "light",
+      "aliases": [
+        "TemperLight"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1RGB",
+      "description": "Bulb E26/E27, RGB+WW 2700K, globe, opal, 400lm",
+      "kind": "light",
+      "aliases": [
+        "ColorLight"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2CM-N-DC",
+      "description": "Gear window shade motor",
+      "kind": "cover",
+      "aliases": [
+        "CurtainMo-EF-3.0",
+        "CurtainMo-EF"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1MS-M",
+      "description": "Smart motion sensor",
+      "kind": "motion",
+      "aliases": [
+        "PIR_TPV16"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1MS-EF",
+      "description": "Smart motion sensor",
+      "kind": "motion",
+      "aliases": [
+        "TY0202"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS9MS-E",
+      "description": "Smart motion sensor",
+      "kind": "motion",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2DB",
+      "description": "Smart doorbell button",
+      "kind": "remote",
+      "aliases": [
+        "DoorBell-EM"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2SS-E_V03",
+      "description": "Smart doorbell button",
+      "kind": "remote",
+      "aliases": [
+        "DoorBell-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS3AQ",
+      "description": "Smart air quality monitor",
+      "kind": "air",
+      "aliases": [
+        "HS3AQ-EFA-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2RNL",
+      "description": "Smart repeater & night light",
+      "kind": "light",
+      "aliases": [
+        "RouteLight-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "PIR_TPV12",
+      "description": "Motion sensor",
+      "kind": "motion",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS15A-M",
+      "description": "Smart smoke alarm relabeled for zipato",
+      "kind": "smoke",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2FD-EF1-3.0",
+      "description": "Fall Detection Sensor",
+      "kind": "fall",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS8OS-EF1-3.0",
+      "description": "Human presence sensor",
+      "kind": "motion",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS8MIS-EF1-3.0",
+      "description": "PIR sensor",
+      "kind": "motion",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS8MLS-EF1-3.0",
+      "description": "PIR sensor with night light",
+      "kind": "motion",
+      "aliases": [
+        "HS8MIS-86-EF1-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2AQ-EF-3.0",
+      "description": "Air quality monitor",
+      "kind": "air",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1SA-E-PLUS",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [
+        "HS1SA-EF-3.0"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "hs1sa_efa.py"
+      ]
+    },
+    {
+      "id": "S1-TL",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [],
+      "zha": "quirk",
+      "zhaSources": [
+        "s1_tl.py"
+      ]
+    },
+    {
+      "id": "S1-M",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "S1-TL-AI",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [
+        "SC6-EF2-AI"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "S2-E",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HM-722ESY-E Plus",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [
+        "HM-722ESY-E-PLUS"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "hm_722_esy_e_plus.py"
+      ]
+    },
+    {
+      "id": "HS1CA-E-PLUS",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [
+        "HS1CA-E PLUS"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "hs1ca_e_plus.py"
+      ]
+    },
+    {
+      "id": "C1-M",
+      "description": "Smart carbon monoxide alarm",
+      "kind": "co",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS1SA-E Lover",
+      "description": "Smart smoke alarm",
+      "kind": "smoke",
+      "aliases": [
+        "Smokesensor-EF2-3.0",
+        "SmokeSensor-EF2-3.0"
+      ],
+      "zha": "quirk",
+      "zhaSources": [
+        "hs1sa_e_lover.py"
+      ]
+    },
+    {
+      "id": "HM-636THV-AC-M",
+      "description": "Smart smoke&CO alarm",
+      "kind": "smoke_co",
+      "aliases": [],
+      "zha": "quirk",
+      "zhaSources": [
+        "hm_636thv_ac_m.py"
+      ]
+    },
+    {
+      "id": "SC6",
+      "description": "Smart smoke&CO alarm",
+      "kind": "smoke_co",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2WD-EF",
+      "description": "Smart siren",
+      "kind": "siren",
+      "aliases": [
+        "WarningDevice-EFA1-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "M1P-E",
+      "description": "Smart occupancy sensor",
+      "kind": "motion",
+      "aliases": [
+        "M1-PE"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HM-5HA-E",
+      "description": "Smart heat alarm",
+      "kind": "heat",
+      "aliases": [
+        "HM-5HA-EF-3.0"
+      ],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2VTD",
+      "description": "Smart 4 in 1 door sensor",
+      "kind": "contact",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2TD",
+      "description": "Smart 3 in 1 door sensor",
+      "kind": "contact",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2HT",
+      "description": "Smart temperature & humidity sensor",
+      "kind": "climate",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    },
+    {
+      "id": "HS2NLV",
+      "description": "Smart notifier",
+      "kind": "light",
+      "aliases": [],
+      "zha": "standard",
+      "zhaSources": []
+    }
+  ]
+}

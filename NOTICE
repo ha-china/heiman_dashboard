@@ -1,0 +1,15 @@
+HEIMAN Dashboard
+Copyright 2026 HEIMAN Dashboard contributors
+
+This project is licensed under the Apache License, Version 2.0.
+Repository organization references ha-china/heiman_home.
+
+Device metadata is derived from the publicly maintained HEIMAN definitions in
+Koenkk/zigbee-herdsman-converters (MIT) and zigpy/zha-device-handlers (Apache-2.0).
+Exact source revisions and evidence links are recorded in src/data/catalog.json
+and docs/SUPPORTED_DEVICES.md. No upstream converter or quirk code is executed
+or distributed as application runtime code.
+
+The JavaScript bundle includes Lit and its runtime packages, licensed under the
+BSD 3-Clause License. Their license is reproduced in THIRD_PARTY_LICENSES.md
+and in the distributable bundle.
