@@ -61,6 +61,8 @@ device_id: 你的HA设备ID
 
 语言代码依次为 `zh`、`en`、`de`、`fr`、`es`、`it`、`nl`、`pt`、`pl`，默认 `auto`。`language: de` 可指定德语；`language: auto` 跟随当前 HA 用户的语言。设备名称保持用户原有命名，数值单位和格式沿用 HA 设置。
 
+切换语言：编辑仪表盘 → 编辑 HEIMAN 卡片 → 在“卡片名称”下方找到“语言”下拉框，选择“自动识别”或指定语言。卡片顶部在 HEIMAN 旁显示 MQTT/ZHA 标签及更新时间；底部仅在有设置或详情操作时显示操作栏。
+
 ## 开发与发布
 
 仓库按 `heiman_home` 的根目录说明文档、`hacs.json`、Apache-2.0 许可证、`.github/workflows` 和中文文档组织方式建立；卡片是前端 Dashboard 插件，因此使用 TypeScript/Lit 源码、`dist/heiman_dashboard.js` 发布产物和 `category: plugin` 校验。

@@ -129,9 +129,34 @@ export const cardStyles = css`
   }
   .top {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
+  }
+  .brand-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .source-badge {
+    font-size: 9px;
+    line-height: 1.4;
+    padding: 1px 5px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--muted);
+    background: var(--tile);
+  }
+  .updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 10px;
+    color: var(--muted);
   }
   .brand {
     font-size: 9px;
@@ -144,6 +169,7 @@ export const cardStyles = css`
     color: var(--muted);
     text-align: right;
     min-width: 0;
+    flex: 1;
     overflow-wrap: anywhere;
   }
   .heading {
@@ -307,13 +333,9 @@ export const cardStyles = css`
     display: flex;
     align-items: center;
     gap: 4px;
+    justify-content: flex-end;
     flex-wrap: wrap;
     font-size: 10px;
-  }
-  .stamp {
-    margin-right: auto;
-    padding: 8px 0;
-    overflow-wrap: anywhere;
   }
   .panel-toggle {
     display: inline-flex;

@@ -100,11 +100,13 @@ See [src/config.ts](src/config.ts) for supported role names. Alarm roles must re
 
 Switch and light buttons operate their exact HA entity. Curtain controls call native cover services. The card directly exposes indicator switches, self-test buttons, temporary hush, siren start/stop and available select/number settings. Z2M automation sound profiles use the exposed select entity; ZHA sirens use native siren services. Tone, duration and volume fields appear only when the siren advertises those capabilities. Numeric settings respect the entity's range and step.
 
-Open **Device settings** for those inline settings, or **Details** for all entity readings. Both start collapsed, share the compact footer and preserve unfinished settings when closed. An active detector alarm exposes its hush action immediately; a siren reported as sounding exposes its supported stop action even with settings closed. Everyday switch, light and curtain controls remain visible.
+The header places the MQTT/ZHA badge beside HEIMAN and shows the last update time. Open **Device settings** for inline settings, or **Details** for all entity readings. Both start collapsed, share the compact action row and preserve unfinished settings when closed. Cards without either action omit that row. An active detector alarm exposes its hush action immediately; a siren reported as sounding exposes its supported stop action even with settings closed. Everyday switch, light and curtain controls remain visible.
 
 Buttons that have never been pressed may report `unknown`; they remain usable while the device is available. A successful service request is shown as sent, while the UI waits for the integration to report the actual state. Temporary hush requests silencing; it does not offer an undocumented inverse command. Firmware updates and complex remote functions retain HA's native dialog. Disabled or hidden entities are not automatically selected. Sensor values retain the integration's units and HA formatting.
 
 All nine languages cover the card, editor, statuses and inline controls. `auto` follows the HA user's language, including regional variants such as `de-DE`, `fr-CA` and `pt-PT`. Device names and unknown vendor-defined option names remain as provided by the integration.
+
+To choose a language, edit the dashboard, edit the HEIMAN card, and use **Language** directly below **Card name** in the visual editor.
 
 ## Troubleshooting
 

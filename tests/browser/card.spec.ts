@@ -52,7 +52,7 @@ test("card picker registration, module reload and default setup", async ({
     ),
   ).toBe(1);
   await expect(page.locator("#card-co .status-label")).toHaveText("正常");
-  await expect(page.locator("#card-co .footer")).toContainText("ZHA");
+  await expect(page.locator("#card-co .top .source-badge")).toHaveText("ZHA");
   expect(errors).toEqual([]);
 });
 test("all three styles and alarm/offline/low-battery scenarios update", async ({

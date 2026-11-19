@@ -21,6 +21,7 @@ const paths: Record<string, string> = {
   info: "M12 11v6M12 7h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
   alert: "m12 3 10 18H2L12 3ZM12 9v5M12 17h.01",
   settings: "M4 7h16M4 17h16M8 4v6M16 14v6",
+  clock: "M12 7v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
   humidity:
     "M12 2S5 10 5 15a7 7 0 0 0 14 0c0-5-7-13-7-13ZM9 17l6-6M9 11h.01M15 17h.01",
   energy: "m13 2-9 12h7l-1 8 10-13h-8l1-7Z",

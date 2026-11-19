@@ -155,6 +155,10 @@ export class HeimanDeviceCard extends HeimanElement {
           })
         : undefined;
     const details = this._detailEntities();
+    const hasSettings =
+      this._config.show_controls !== false && settings.length > 0;
+    const hasDetails =
+      this._config.show_details !== false && details.length > 0;
     return html` <ha-card
       class=${theme}
       data-severity=${status.severity}
@@ -162,8 +166,19 @@ export class HeimanDeviceCard extends HeimanElement {
     >
       <div class="body">
         <div class="top">
-          <span class="brand">HEIMAN</span
-          ><span class="model">${preset.id}</span>
+          <span class="brand-line"
+            ><span class="brand">HEIMAN</span
+            ><span class="source-badge">${source || "HA"}</span></span
+          >
+          <span class="model">${preset.id}</span>
+          <time
+            class="updated"
+            datetime=${updated && date ? date.toISOString() : nothing}
+            aria-label=${updated ? `${this.t("updated")} ${updated}` : this.t("not_reported")}
+            title=${updated && date ? `${this.t("updated")} ${date.toLocaleString(languageFor(this._config, hass))}` : this.t("not_reported")}
+          >
+            ${icon("clock", 11)}${updated || "—"}
+          </time>
         </div>
         <div class="heading">
           ${primary ? html`<button class="illustration icon-button" aria-label=${this.t("more_info")} @click=${() => this._moreInfo(primary)}>${deviceDrawing(preset.kind)}</button>` : html`<div class="illustration">${deviceDrawing(preset.kind)}</div>`}
@@ -216,46 +231,44 @@ export class HeimanDeviceCard extends HeimanElement {
             : nothing
         }
         ${controls.length ? html`<div class="actions">${controls.map((id) => this._renderControl(id))}</div>` : nothing}
-        <div class="footer">
-          <span
-            class="stamp"
-            title=${date ? `${this.t("updated")} ${date.toLocaleString(languageFor(this._config, hass))}` : this.t("not_reported")}
-          >
-            ${source || "Home Assistant"}${updated ? ` · ${updated}` : ""}
-          </span>
-          ${
-            this._config.show_controls !== false && settings.length
-              ? html`<button
-                  class="panel-toggle settings-toggle"
-                  aria-expanded=${this._settingsOpen}
-                  aria-controls="device-settings"
-                  @click=${() => {
-                    this._settingsOpen = !this._settingsOpen;
-                    this._detailsOpen = false;
-                  }}
-                >
-                  ${icon("settings", 13)}${this.t("settings")}
-                </button>`
-              : nothing
-          }
-          ${
-            this._config.show_details !== false && details.length
-              ? html`<button
-                  class="panel-toggle details-toggle"
-                  aria-expanded=${this._detailsOpen}
-                  aria-controls="entity-readings"
-                  @click=${() => {
-                    this._detailsOpen = !this._detailsOpen;
-                    this._settingsOpen = false;
-                  }}
-                >
-                  ${this.t("details")}${icon("chevron", 12)}
-                </button>`
-              : nothing
-          }
-        </div>
         ${
-          this._config.show_controls !== false && settings.length
+          hasSettings || hasDetails
+            ? html`<div class="footer">
+                ${
+                  hasSettings
+                    ? html`<button
+                        class="panel-toggle settings-toggle"
+                        aria-expanded=${this._settingsOpen}
+                        aria-controls="device-settings"
+                        @click=${() => {
+                          this._settingsOpen = !this._settingsOpen;
+                          this._detailsOpen = false;
+                        }}
+                      >
+                        ${icon("settings", 13)}${this.t("settings")}
+                      </button>`
+                    : nothing
+                }
+                ${
+                  hasDetails
+                    ? html`<button
+                        class="panel-toggle details-toggle"
+                        aria-expanded=${this._detailsOpen}
+                        aria-controls="entity-readings"
+                        @click=${() => {
+                          this._detailsOpen = !this._detailsOpen;
+                          this._settingsOpen = false;
+                        }}
+                      >
+                        ${this.t("details")}${icon("chevron", 12)}
+                      </button>`
+                    : nothing
+                }
+              </div>`
+            : nothing
+        }
+        ${
+          hasSettings
             ? html`<heiman-entity-controls
                 id="device-settings"
                 .hass=${hass}
@@ -269,7 +282,7 @@ export class HeimanDeviceCard extends HeimanElement {
         }
         ${this._serviceError ? html`<div class="error" role="alert">${this.t("service_error")}</div>` : nothing}
         ${
-          this._config.show_details !== false && details.length
+          hasDetails
             ? html`<div
                 class="readings"
                 id="entity-readings"
