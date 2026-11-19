@@ -96,6 +96,26 @@ test("translation keys survive arbitrary entity ID renaming", () => {
   });
   assert.equal(roleFor(registry.entities.at(-1)!, hass, "smoke"), "test");
 });
+test("known heat models recognize ZHA IAS zones without guessing combined detector channels", () => {
+  const { hass, registry, add } = fixture();
+  registry.devices.push({
+    id: "heat-a",
+    manufacturer: "HEIMAN",
+    model: "HM-5HA-E",
+  });
+  add("binary_sensor.detector_ias_zone", "heat-a", "off", undefined, {
+    translation_key: "ias_zone",
+  });
+  const result = resolveDevice(
+    { ...config, model: "HM-5HA-E" },
+    hass,
+    registry,
+  );
+  assert.deepEqual(result.bindings.heat, ["binary_sensor.detector_ias_zone"]);
+  const zone = registry.entities.at(-1)!;
+  assert.equal(roleFor(zone, hass, "smoke_co"), undefined);
+  assert.equal(roleFor(zone, hass), undefined);
+});
 test("disabled and hidden entities are excluded for both registry API shapes", () => {
   const { hass, add, registry } = fixture();
   add("binary_sensor.disabled_smoke", "smoke-a", "on", "smoke", {

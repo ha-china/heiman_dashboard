@@ -99,6 +99,9 @@ export function roleFor(
       return "motion";
     if (deviceClass === "vibration") return "vibration";
     if (deviceClass === "heat") return "heat";
+    // ZHA can expose a heat detector as an unclassified IAS zone.
+    if (!deviceClass && kind === "heat" && has(/(?:^|_)ias_zone(?:_\d+)?$/))
+      return "heat";
     // Match suffixes rather than the device's display name: a smoke detector's battery is not a smoke alarm.
     if (has(/(?:^|_)(?:smoke|smoke_alarm)(?:_\d+)?$/)) return "smoke";
     if (has(/(?:^|_)(?:carbon_monoxide|co_alarm|co)(?:_\d+)?$/)) return "co";
