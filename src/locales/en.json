@@ -1,4 +1,6 @@
 {
+  "language_name": "English",
+  "follow_system": "Follow Home Assistant",
   "home": "Home",
   "fire": "Fire safety",
   "minimal": "Minimal",

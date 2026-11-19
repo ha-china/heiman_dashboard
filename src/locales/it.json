@@ -1,4 +1,6 @@
 {
+  "language_name": "Italiano",
+  "follow_system": "Segui Home Assistant",
   "home": "Casa",
   "fire": "Sicurezza antincendio",
   "minimal": "Essenziale",

@@ -47,6 +47,35 @@ test("regional HA language codes resolve and explicit language overrides are res
     ),
     "it",
   );
-  assert.equal(translate("de", "unavailable"), "Nicht verfügbar");
-  assert.equal(translate("fr", "remote_self_test"), "Autotest à distance");
+  assert.equal(translate("de", "unavailable"), TRANSLATIONS.de.unavailable);
+  assert.equal(
+    translate("fr", "remote_self_test"),
+    TRANSLATIONS.fr.remote_self_test,
+  );
+});
+
+test("automatic selection follows HA locale and falls back to English", () => {
+  const config = normalizeConfig({ type: "custom:heiman-device-card" });
+  assert.equal(config.language, "auto");
+  assert.equal(languageFor(config), "en");
+  assert.equal(languageFor(config, {} as HomeAssistant), "en");
+  assert.equal(
+    languageFor(config, { language: "sv-SE" } as HomeAssistant),
+    "en",
+  );
+  assert.equal(languageFor(config, { language: "" } as HomeAssistant), "en");
+  assert.equal(
+    languageFor(config, {
+      language: "fr",
+      locale: { language: "de-DE" },
+    } as HomeAssistant),
+    "de",
+  );
+  assert.equal(
+    languageFor(config, {
+      language: "fr",
+      locale: { language: "sv-SE" },
+    } as HomeAssistant),
+    "en",
+  );
 });

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>HEIMAN Dashboard · 本地预览</title>
+    <title>HEIMAN Dashboard · Local preview</title>
     <style>
       :root {
         color-scheme: light;
@@ -249,34 +249,34 @@
     <div class="shell">
       <header>
         <div class="wordmark">HEIMAN <small>HOME ASSISTANT</small></div>
-        <span class="demo-label">本地演示 · 模拟设备数据</span>
+        <span class="demo-label">Local demo · Simulated device data</span>
       </header>
       <div class="intro">
         <div>
           <div class="eyebrow">YOUR HOME, IN GOOD HANDS</div>
-          <h1>家的每一处，安心可见。</h1>
-          <p>安全防护、环境感知与日常控制，尽在一个面板。</p>
+          <h1>Every device. One clear view.</h1>
+          <p>Home safety, comfort and everyday control in one dashboard.</p>
         </div>
         <div class="connected"><span class="dot"></span>Zigbee2MQTT + ZHA</div>
       </div>
       <div class="toolbar">
-        <div class="tabs" aria-label="样式">
-          <button data-style="home" aria-pressed="true">家居风格</button
-          ><button data-style="fire" aria-pressed="false">消防风格</button
-          ><button data-style="minimal" aria-pressed="false">简约风格</button>
+        <div class="tabs" aria-label="Style">
+          <button data-style="home" aria-pressed="true">Home</button
+          ><button data-style="fire" aria-pressed="false">Fire safety</button
+          ><button data-style="minimal" aria-pressed="false">Minimal</button>
         </div>
         <div class="tools">
-          <select id="scenario" aria-label="演示场景">
-            <option value="normal">日常运行</option>
-            <option value="alarm">烟雾报警</option>
-            <option value="offline">设备离线</option>
-            <option value="battery">低电量</option></select
-          ><button id="edit-toggle" aria-expanded="false">卡片编辑器</button>
+          <select id="scenario" aria-label="Demo scenario">
+            <option value="normal">Everyday operation</option>
+            <option value="alarm">Smoke alarm</option>
+            <option value="offline">Device offline</option>
+            <option value="battery">Low battery</option></select
+          ><button id="edit-toggle" aria-expanded="false">Card editor</button>
         </div>
       </div>
       <main class="grid" id="cards"></main>
       <section class="editor-panel" id="editor-panel" hidden>
-        <h2>添加 HEIMAN 卡片</h2>
+        <h2>Add a HEIMAN card</h2>
         <div class="editor-layout">
           <heiman-device-card-editor id="editor"></heiman-device-card-editor
           ><heiman-device-card id="editor-preview"></heiman-device-card>
@@ -286,7 +286,8 @@
       <footer>
         <span>HEIMAN DASHBOARD / 0.1.0</span
         ><span
-          >支持家居、消防与简约三种风格 · 实际功能取决于设备提供的实体</span
+          >Home, fire safety and minimal styles · Features depend on exposed
+          device entities</span
         >
       </footer>
     </div>

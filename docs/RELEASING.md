@@ -1,32 +1,35 @@
-# 发布与 HACS 审核
+# Releases and HACS validation
 
-当前项目已准备为 HACS **Dashboard** 插件。版本发布、默认商店收录和实机验收需要在正式发布时完成；本地构建成功不等同于 HACS 审核通过。
+This project is prepared as a HACS **Dashboard** plugin. Version publication, default-catalog inclusion and hardware acceptance are separate release steps. A successful local build alone does not establish HACS approval.
 
-## 仓库元信息
+## Repository metadata
 
-仓库名称使用 `heiman_dashboard`，与 `dist/heiman_dashboard.js` 和 `hacs.json.filename` 一致。公开地址为 `ha-china/heiman_dashboard`，若仓库所有者变化请同步更新。
+The repository name `heiman_dashboard` matches `dist/heiman_dashboard.js` and `hacs.json.filename`. Its public location is `ha-china/heiman_dashboard`; update references if ownership changes.
 
-在 GitHub 仓库中保持以下元信息：
+Maintain the following GitHub repository metadata:
 
-- Description：`HEIMAN product cards for Home Assistant with Zigbee2MQTT and ZHA support.`
-- Topics：`home-assistant`、`hacs`、`lovelace-custom-card`、`heiman`、`zigbee2mqtt`、`zha`。
-- Issues 启用，许可证为 Apache-2.0，README 图片可从公开默认分支访问。
+- Description: `HEIMAN product cards for Home Assistant with Zigbee2MQTT and ZHA support.`
+- Topics: `home-assistant`, `hacs`, `lovelace-custom-card`, `heiman`, `zigbee2mqtt`, `zha`.
+- Enable Issues, use Apache-2.0 licensing and keep README images accessible from the public default branch.
 
-`hacs.json` 只使用官方支持的前端插件字段。发布目录包含可安装的同名 JS 文件，代码已将 Lit 和全部本地资源打包。工作流分类使用 `plugin`，不复制集成专用的 `hassfest` 或 Python `manifest.json`。
+`hacs.json` uses supported frontend plugin fields. The distribution directory contains the installable JavaScript file, bundling Lit and local runtime resources. Validation uses category `plugin`; integration-only `hassfest` and Python `manifest.json` files do not apply.
 
-## 版本验证
+Use English for source code, comments, documentation, demo content and commit messages. Keep translated UI text and native language names in `src/locales/`. Keep automatic HA language selection as the default, with English fallback when the language cannot be supported or determined.
 
-1. 执行 `npm ci`、`npm run format:check`、`npm run check`。
-2. 执行 `npx playwright install --with-deps chromium` 和 `npm run test:browser`。
-3. 检查并提交重新构建的 `dist/heiman_dashboard.js`。更新版本时同步 `package.json`、lockfile、CHANGELOG 和演示页版本。
-4. 在 HA 2025.10+ 和当前稳定版中实际安装。确认 HACS 下载、资源自动注册、浏览器刷新、卡片搜索、可视化配置、保存后重新打开和 sections/masonry 布局。
-5. 使用实际 Z2M、ZHA 设备核对实体与型号别名；验证正常、报警、自检、不可用、低电量、多台相同型号和多路开关。记录设备固件、HA 与上游集成版本。
-6. 将改动推送公开仓库，等待 **HACS Action** 与 **Validate** 全部通过。HACS Action 没有忽略项。需要实际公开仓库元信息，因此本地无法替代运行。
+## Validation
 
-## Release
+1. Run `npm ci`, `npm run format:check` and `npm run check`.
+2. Run `npx playwright install --with-deps chromium` and `npm run test:browser`.
+3. Commit the rebuilt `dist/heiman_dashboard.js`. When changing the version, update `package.json`, the lockfile, CHANGELOG and demo version together.
+4. Install on the minimum supported HA version and the current stable version. Check HACS download/resource registration, browser reload, card search, visual configuration, saved configuration and sections/masonry layouts.
+5. Use real Z2M and ZHA devices to verify model aliases, matching, normal/alarm/test/unavailable/low-battery states, multiple instances and multi-channel controls. Record firmware, HA and integration versions. Coordinate physical alarm/test actions with the installation owner.
+6. Verify automatic language changes, regional language codes, English fallback and explicit language overrides. Ensure that all nine locale resources have the same key set.
+7. Push the public repository and wait for both **HACS Action** and **Validate** to pass. HACS validation has no ignored checks and requires actual public repository metadata.
 
-版本号与 Git 标签必须一致，如 `package.json` 的 `0.1.0` 对应 `v0.1.0`。推送该标签会触发 Release 工作流：重新校验、构建、运行浏览器测试并发布带 `heiman_dashboard.js` 附件的 GitHub Release。初期测试版本建议先在 GitHub 发布为 pre-release，正式实机验收后再创建稳定版本。
+## Publishing a release
 
-发布工作流不会自动提交到 HACS 默认商店。提交默认商店前应先验证 HACS 自定义仓库安装完整流程，并遵循[当前 HACS 收录要求](https://hacs.xyz/docs/publish/include/)，由仓库所有者或主要贡献者向 `hacs/default` 的 `plugin` 列表提交 PR。
+The package version must match the Git tag: package version `0.1.0` corresponds to `v0.1.0`. Pushing a matching tag triggers the Release workflow, which validates, builds, runs browser checks and publishes a GitHub Release with `heiman_dashboard.js` attached. Use a pre-release for initial testing and publish a stable release after hardware acceptance.
 
-参考：[通用发布要求](https://hacs.xyz/docs/publish/start/)、[Dashboard 文件结构](https://hacs.xyz/docs/publish/plugin/)、[HACS Action](https://hacs.xyz/docs/publish/action/)、[HA 卡片注册与编辑器](https://contributors.home-assistant.io/frontend/custom-ui/card-editor/)。
+The Release workflow does not submit the project to the HACS default catalog. Before requesting inclusion, validate custom-repository installation and follow the [HACS inclusion requirements](https://hacs.xyz/docs/publish/include/). The repository owner or a major contributor can submit a pull request to the `plugin` list in `hacs/default`.
+
+References: [publishing requirements](https://hacs.xyz/docs/publish/start/), [dashboard repository structure](https://hacs.xyz/docs/publish/plugin/), [HACS Action](https://hacs.xyz/docs/publish/action/) and [HA card registration/editor](https://contributors.home-assistant.io/frontend/custom-ui/card-editor/).

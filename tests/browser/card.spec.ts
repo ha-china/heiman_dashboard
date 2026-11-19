@@ -20,12 +20,13 @@ declare global {
       refresh(): void;
       setState(id: string, value: string): void;
       setAttributes(id: string, attributes: Record<string, unknown>): void;
+      setLanguage(language: string): void;
     };
   }
 }
 async function ready(page: Page) {
   await page.goto("/");
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("正常");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Normal");
 }
 test("card picker registration, module reload and default setup", async ({
   page,
@@ -51,7 +52,7 @@ test("card picker registration, module reload and default setup", async ({
           .length,
     ),
   ).toBe(1);
-  await expect(page.locator("#card-co .status-label")).toHaveText("正常");
+  await expect(page.locator("#card-co .status-label")).toHaveText("Normal");
   await expect(page.locator("#card-co .top .source-badge")).toHaveText("ZHA");
   expect(errors).toEqual([]);
 });
@@ -68,15 +69,19 @@ test("all three styles and alarm/offline/low-battery scenarios update", async ({
     "data-severity",
     "alarm",
   );
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("报警");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Alarm");
   await page.locator("#scenario").selectOption("offline");
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("不可用");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText(
+    "Unavailable",
+  );
   await page.locator("#scenario").selectOption("battery");
-  await expect(page.locator("#card-smoke .alerts")).toContainText("低电量");
+  await expect(page.locator("#card-smoke .alerts")).toContainText(
+    "Low battery",
+  );
   await page.evaluate(() =>
     window.heimanDemo.setState("binary_sensor.smoke_smoke", "unknown"),
   );
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("未知");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Unknown");
 });
 test("visual editor saves model, instance, style, language and display settings", async ({
   page,
@@ -90,16 +95,16 @@ test("visual editor saves model, instance, style, language and display settings"
   expect(await page.evaluate(() => window.heimanDemo.config.device_id)).toBe(
     "climate",
   );
-  await editor.getByRole("button", { name: "消防风格" }).click();
+  await editor.getByRole("button", { name: "Fire safety" }).click();
   await expect(page.locator("#editor-preview ha-card")).toHaveClass("fire");
   await editor.locator("#name").fill("My bedroom");
   await editor.locator("#name").press("Tab");
   await expect(page.locator("#editor-preview h2")).toHaveText("My bedroom");
-  await editor.getByLabel("显示电量", { exact: true }).uncheck();
+  await editor.getByLabel("Show battery", { exact: true }).uncheck();
   await expect(
     page
       .locator("#editor-preview .metric-label")
-      .filter({ hasText: "电池电量" }),
+      .filter({ hasText: "Battery" }),
   ).toHaveCount(0);
   await editor.locator("#language").selectOption("en");
   await expect(page.locator("#editor-preview .status-label")).toHaveText(
@@ -173,7 +178,7 @@ test("switch commands target the selected entity, update state and recover from 
 }) => {
   await ready(page);
   await page.locator("#card-plug .actions button").click();
-  await expect(page.locator("#card-plug .status-label")).toHaveText("已关闭");
+  await expect(page.locator("#card-plug .status-label")).toHaveText("Off");
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "switch",
     service: "turn_off",
@@ -183,7 +188,9 @@ test("switch commands target the selected entity, update state and recover from 
     window.heimanDemo.failService = true;
   });
   await page.locator("#card-plug .actions button").click();
-  await expect(page.locator("#card-plug .error")).toContainText("指令执行失败");
+  await expect(page.locator("#card-plug .error")).toContainText(
+    "command failed",
+  );
   await page.evaluate(() =>
     window.heimanDemo.setState("switch.plug_outlet", "unavailable"),
   );
@@ -228,7 +235,7 @@ test("malicious device labels render as text and mobile layouts do not overflow"
       model: "HS1SA-E-PLUS",
       device_id: "smoke",
       name: '<img src=x onerror="window.pwned=1">',
-      language: "zh",
+      language: "en",
     });
   });
   await expect(page.locator("#card-smoke h2")).toHaveText(
@@ -241,7 +248,7 @@ test("malicious device labels render as text and mobile layouts do not overflow"
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("正常");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Normal");
 });
 test("every catalog preset renders with MQTT model_id and its available HA capabilities", async ({
   page,
@@ -472,7 +479,7 @@ test("unrelated HA state changes do not redraw cards, while bound state changes 
     return { unrelated, related, theme: renders };
   });
   expect(result).toEqual({ unrelated: 0, related: 1, theme: 2 });
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("报警");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Alarm");
   await expect(page.locator("#card-smoke ha-card")).toHaveAttribute(
     "data-dark",
     "",

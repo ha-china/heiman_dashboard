@@ -1,11 +1,11 @@
 await customElements.whenDefined("heiman-device-card");
 const devices = [
-  ["smoke", "HS1SA-E-PLUS", "客厅烟雾报警器", "living", "mqtt"],
-  ["co", "HS1CA-E-PLUS", "厨房 CO 报警器", "kitchen", "zha"],
-  ["climate", "HS3HT", "卧室温湿度", "bedroom", "mqtt"],
-  ["leak", "HS1WL/HS3WL", "洗衣房漏水监测", "laundry", "zha"],
-  ["contact", "HS1DS", "入户门状态", "entry", "zha"],
-  ["plug", "HS2SK", "阅读角智能插座", "living", "mqtt"],
+  ["smoke", "HS1SA-E-PLUS", "Living room smoke alarm", "living", "mqtt"],
+  ["co", "HS1CA-E-PLUS", "Kitchen CO alarm", "kitchen", "zha"],
+  ["climate", "HS3HT", "Bedroom climate", "bedroom", "mqtt"],
+  ["leak", "HS1WL/HS3WL", "Laundry leak sensor", "laundry", "zha"],
+  ["contact", "HS1DS", "Entrance door", "entry", "zha"],
+  ["plug", "HS2SK", "Reading corner plug", "living", "mqtt"],
 ].map(([id, model, name, area_id, platform]) => ({
   id,
   model,
@@ -15,6 +15,7 @@ const devices = [
   manufacturer: "HEIMAN",
 }));
 let states = {};
+let locale = { language: "en" };
 const entities = {};
 const now = new Date().toISOString();
 function entity(
@@ -102,7 +103,7 @@ const baseConfig = {
   type: "custom:heiman-device-card",
   style,
   show_details: false,
-  language: "zh",
+  language: "auto",
 };
 const editor = document.querySelector("#editor");
 const preview = document.querySelector("#editor-preview");
@@ -113,18 +114,19 @@ function hass() {
     entities,
     devices: Object.fromEntries(devices.map((device) => [device.id, device])),
     areas: {
-      living: { name: "客厅" },
-      kitchen: { name: "厨房" },
-      bedroom: { name: "卧室" },
-      laundry: { name: "洗衣房" },
-      entry: { name: "玄关" },
+      living: { name: "Living room" },
+      kitchen: { name: "Kitchen" },
+      bedroom: { name: "Bedroom" },
+      laundry: { name: "Laundry" },
+      entry: { name: "Entrance" },
     },
-    language: "zh-Hans",
+    language: locale.language,
+    locale,
     connection,
     callService: async (domain, service, data) => {
       calls.push({ domain, service, data });
       document.querySelector("#events").textContent =
-        `模拟服务调用：${domain}.${service} → ${data.entity_id}`;
+        `Simulated service call: ${domain}.${service} → ${data.entity_id}`;
       if (window.heimanDemo.failService) throw new Error("Demo failure");
       if (states[data.entity_id])
         states = {
@@ -169,7 +171,7 @@ editor.addEventListener("config-changed", (event) => {
 });
 document.addEventListener("hass-more-info", (event) => {
   document.querySelector("#events").textContent =
-    `Home Assistant 详情：${event.detail.entityId}`;
+    `Home Assistant details: ${event.detail.entityId}`;
 });
 document.querySelectorAll("[data-style]").forEach((button) =>
   button.addEventListener("click", () => {
@@ -217,6 +219,10 @@ window.heimanDemo = {
   },
   failService: false,
   refresh,
+  setLanguage(language) {
+    locale = { language };
+    refresh();
+  },
   setState(id, state) {
     states = { ...states, [id]: { ...states[id], state } };
     refresh();

@@ -264,7 +264,10 @@ export class HeimanCardEditor extends HeimanElement {
         id="language"
         @change=${(event: Event) => this._change({ language: (event.target as HTMLSelectElement).value as CardConfig["language"] })}
       >
-        ${[["auto", this.t("auto")], ...Object.entries(LANGUAGE_NAMES)].map(
+        ${[
+          ["auto", this.t("follow_system")],
+          ...Object.entries(LANGUAGE_NAMES),
+        ].map(
           ([value, label]) =>
             html`<option
               value=${value}

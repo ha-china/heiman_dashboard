@@ -1,6 +1,6 @@
 # HEIMAN Dashboard
 
-[简体中文](readme/README_cn.md) · [Device catalog](docs/SUPPORTED_DEVICES.md) · [Development](docs/ARCHITECTURE.md)
+[Device catalog](docs/SUPPORTED_DEVICES.md) · [Development](docs/ARCHITECTURE.md)
 
 ![Home Assistant](https://img.shields.io/badge/Home_Assistant-2025.10%2B-41BDF5)
 ![HACS custom repository](https://img.shields.io/badge/HACS-Custom_repository-blue)
@@ -107,6 +107,10 @@ Buttons that have never been pressed may report `unknown`; they remain usable wh
 All nine languages cover the card, editor, statuses and inline controls. `auto` follows the HA user's language, including regional variants such as `de-DE`, `fr-CA` and `pt-PT`. Device names and unknown vendor-defined option names remain as provided by the integration.
 
 To choose a language, edit the dashboard, edit the HEIMAN card, and use **Language** directly below **Card name** in the visual editor.
+
+The default is **Follow Home Assistant** (`language: auto`). This follows the current HA user's interface language, including changes made after opening the dashboard. Unsupported or unavailable language settings fall back to English. An explicit card language overrides automatic selection; remove an old `language: zh` override or select **Follow Home Assistant** to restore automatic behavior.
+
+Source code, comments, documentation, demo content and commit messages use English. Translated UI strings and native language names are stored in `src/locales/`.
 
 ## Troubleshooting
 

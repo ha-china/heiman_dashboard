@@ -10,15 +10,15 @@ import pt from "./locales/pt.json";
 import pl from "./locales/pl.json";
 
 export const LANGUAGE_NAMES: Record<Language, string> = {
-  zh: "简体中文",
-  en: "English",
-  de: "Deutsch",
-  fr: "Français",
-  es: "Español",
-  it: "Italiano",
-  nl: "Nederlands",
-  pt: "Português",
-  pl: "Polski",
+  zh: zh.language_name,
+  en: en.language_name,
+  de: de.language_name,
+  fr: fr.language_name,
+  es: es.language_name,
+  it: it.language_name,
+  nl: nl.language_name,
+  pt: pt.language_name,
+  pl: pl.language_name,
 };
 export type TranslationKey = keyof typeof en;
 export const TRANSLATIONS: Record<Language, Record<TranslationKey, string>> = {

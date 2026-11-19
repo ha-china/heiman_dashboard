@@ -1,4 +1,6 @@
 {
+  "language_name": "Polski",
+  "follow_system": "Używaj języka Home Assistant",
   "home": "Dom",
   "fire": "Ochrona przeciwpożarowa",
   "minimal": "Prosty",

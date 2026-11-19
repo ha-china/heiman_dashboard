@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("正常");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Normal");
 });
 
 test("six devices and their readings fit on a desktop without expanding settings", async ({
@@ -51,20 +51,20 @@ test("settings and readings expand on demand without issuing commands or losing 
   await card.locator(".settings-toggle").click();
   const settings = card.locator("heiman-entity-controls");
   await expect(
-    settings.getByRole("button", { name: "远程自检", exact: true }),
+    settings.getByRole("button", { name: "Remote self-test", exact: true }),
   ).toBeVisible();
   await settings.locator(".siren summary").click();
   await settings
-    .getByLabel("警音模式", { exact: true })
+    .getByLabel("Sound profile", { exact: true })
     .selectOption("co_siren");
   await card.locator(".details-toggle").click();
   await expect(card.locator(".readings")).toBeVisible();
   await expect(settings.locator(".full")).toBeHidden();
   await card.locator(".settings-toggle").click();
   await expect(card.locator(".readings")).toBeHidden();
-  await expect(settings.getByLabel("警音模式", { exact: true })).toHaveValue(
-    "co_siren",
-  );
+  await expect(
+    settings.getByLabel("Sound profile", { exact: true }),
+  ).toHaveValue("co_siren");
   expect(await page.evaluate(() => window.heimanDemo.calls.length)).toBe(0);
 });
 
@@ -74,14 +74,14 @@ test("an alarm exposes hush and a sounding siren exposes stop even with settings
   const smoke = page.locator("#card-smoke"),
     co = page.locator("#card-co");
   await page.locator("#scenario").selectOption("alarm");
-  await expect(smoke.locator(".status-label")).toHaveText("报警");
+  await expect(smoke.locator(".status-label")).toHaveText("Alarm");
   await expect(smoke.locator(".settings-toggle")).toHaveAttribute(
     "aria-expanded",
     "false",
   );
   await smoke
     .locator(".emergency")
-    .getByRole("button", { name: "临时消音", exact: true })
+    .getByRole("button", { name: "Temporary hush", exact: true })
     .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "switch",

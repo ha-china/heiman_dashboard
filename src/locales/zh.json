@@ -1,4 +1,6 @@
 {
+  "language_name": "简体中文",
+  "follow_system": "跟随 Home Assistant",
   "home": "家居风格",
   "fire": "消防风格",
   "minimal": "简约风格",

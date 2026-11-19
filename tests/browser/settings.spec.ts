@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import type { Language } from "../../src/types";
+import { readFileSync } from "node:fs";
 
 declare global {
   interface Window {
@@ -14,7 +15,7 @@ declare global {
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#card-smoke .status-label")).toHaveText("正常");
+  await expect(page.locator("#card-smoke .status-label")).toHaveText("Normal");
   await page.locator("#card-smoke .settings-toggle").click();
   await page.locator("#card-co .settings-toggle").click();
 });
@@ -23,22 +24,26 @@ test("self-test, temporary hush and indicator controls issue exact device servic
 }) => {
   const controls = page.locator("#card-smoke heiman-entity-controls");
   await expect(
-    controls.getByRole("button", { name: "远程自检", exact: true }),
+    controls.getByRole("button", { name: "Remote self-test", exact: true }),
   ).toBeEnabled();
-  await controls.getByRole("button", { name: "远程自检", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Remote self-test", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "button",
     service: "press",
     data: { entity_id: "button.smoke_trigger_selftest" },
   });
-  await controls.getByRole("button", { name: "临时消音", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Temporary hush", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "switch",
     service: "turn_on",
     data: { entity_id: "switch.smoke_temporary_mute" },
   });
   await controls
-    .getByRole("switch", { name: "状态指示灯", exact: true })
+    .getByRole("switch", { name: "Status indicator", exact: true })
     .uncheck();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "switch",
@@ -46,9 +51,9 @@ test("self-test, temporary hush and indicator controls issue exact device servic
     data: { entity_id: "switch.smoke_heartbeat_indicator" },
   });
   await expect(
-    controls.getByRole("switch", { name: "状态指示灯", exact: true }),
+    controls.getByRole("switch", { name: "Status indicator", exact: true }),
   ).not.toBeChecked();
-  await expect(controls.locator(".feedback")).toContainText("指令已发送");
+  await expect(controls.locator(".feedback")).toContainText("Command sent.");
 });
 test("Z2M sound profiles are staged until start; stop sends the exposed stop option", async ({
   page,
@@ -56,10 +61,12 @@ test("Z2M sound profiles are staged until start; stop sends the exposed stop opt
   const controls = page.locator("#card-smoke heiman-entity-controls");
   await controls.locator(".siren summary").click();
   await controls
-    .getByLabel("警音模式", { exact: true })
+    .getByLabel("Sound profile", { exact: true })
     .selectOption("co_siren");
   expect(await page.evaluate(() => window.heimanDemo.calls.length)).toBe(0);
-  await controls.getByRole("button", { name: "开启警报", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Start siren", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "select",
     service: "select_option",
@@ -68,7 +75,9 @@ test("Z2M sound profiles are staged until start; stop sends the exposed stop opt
       option: "co_siren",
     },
   });
-  await controls.getByRole("button", { name: "停止警报", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Stop siren", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "select",
     service: "select_option",
@@ -83,16 +92,22 @@ test("ZHA basic sirens expose duration without unsupported tone or volume contro
 }) => {
   const controls = page.locator("#card-co heiman-entity-controls");
   await controls.locator(".siren summary").click();
-  await expect(controls.getByLabel("警音模式", { exact: true })).toHaveCount(0);
-  await expect(controls.getByLabel("音量", { exact: true })).toHaveCount(0);
-  await controls.getByLabel("持续时间", { exact: true }).fill("12");
-  await controls.getByRole("button", { name: "开启警报", exact: true }).click();
+  await expect(
+    controls.getByLabel("Sound profile", { exact: true }),
+  ).toHaveCount(0);
+  await expect(controls.getByLabel("Volume", { exact: true })).toHaveCount(0);
+  await controls.getByLabel("Duration", { exact: true }).fill("12");
+  await controls
+    .getByRole("button", { name: "Start siren", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "siren",
     service: "turn_on",
     data: { entity_id: "siren.co_alarm", duration: 12 },
   });
-  await controls.getByRole("button", { name: "停止警报", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Stop siren", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "siren",
     service: "turn_off",
@@ -110,10 +125,12 @@ test("full siren capabilities preserve dictionary tones and convert percentage v
   );
   const controls = page.locator("#card-co heiman-entity-controls");
   await controls.locator(".siren summary").click();
-  await controls.getByLabel("警音模式", { exact: true }).selectOption("2");
-  await controls.getByLabel("持续时间", { exact: true }).fill("15");
-  await controls.getByLabel("音量", { exact: true }).fill("35");
-  await controls.getByRole("button", { name: "开启警报", exact: true }).click();
+  await controls.getByLabel("Sound profile", { exact: true }).selectOption("2");
+  await controls.getByLabel("Duration", { exact: true }).fill("15");
+  await controls.getByLabel("Volume", { exact: true }).fill("35");
+  await controls
+    .getByRole("button", { name: "Start siren", exact: true })
+    .click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "siren",
     service: "turn_on",
@@ -130,12 +147,14 @@ test("number settings submit valid numeric data and surface service failures", a
 }) => {
   const controls = page.locator("#card-smoke heiman-entity-controls");
   await controls.locator(".advanced-settings summary").click();
-  await controls.getByLabel("温度校准", { exact: true }).fill("16");
-  await controls.getByRole("button", { name: "应用", exact: true }).click();
-  await expect(controls.getByRole("alert")).toContainText("请输入设备允许范围");
+  await controls.getByLabel("Temperature offset", { exact: true }).fill("16");
+  await controls.getByRole("button", { name: "Apply", exact: true }).click();
+  await expect(controls.getByRole("alert")).toContainText(
+    "Enter a value within the device's supported range and step.",
+  );
   expect(await page.evaluate(() => window.heimanDemo.calls.length)).toBe(0);
-  await controls.getByLabel("温度校准", { exact: true }).fill("-1.2");
-  await controls.getByRole("button", { name: "应用", exact: true }).click();
+  await controls.getByLabel("Temperature offset", { exact: true }).fill("-1.2");
+  await controls.getByRole("button", { name: "Apply", exact: true }).click();
   expect(await page.evaluate(() => window.heimanDemo.calls.at(-1))).toEqual({
     domain: "number",
     service: "set_value",
@@ -144,12 +163,14 @@ test("number settings submit valid numeric data and surface service failures", a
   await page.evaluate(() => {
     window.heimanDemo.failService = true;
   });
-  await controls.getByRole("button", { name: "远程自检", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Remote self-test", exact: true })
+    .click();
   await expect(controls.getByRole("alert")).toHaveText(
-    "指令执行失败，请重试。",
+    "The command failed. Please try again.",
   );
   await expect(
-    controls.getByRole("button", { name: "远程自检", exact: true }),
+    controls.getByRole("button", { name: "Remote self-test", exact: true }),
   ).toBeEnabled();
 });
 test("stop remains available while a siren start request is pending", async ({
@@ -173,14 +194,18 @@ test("stop remains available while a siren start request is pending", async ({
     };
   });
   const controls = page.locator("#card-co heiman-entity-controls");
-  await controls.getByRole("button", { name: "开启警报", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Start siren", exact: true })
+    .click();
   await expect(
-    controls.getByRole("button", { name: "开启警报", exact: true }),
+    controls.getByRole("button", { name: "Start siren", exact: true }),
   ).toBeDisabled();
   await expect(
-    controls.getByRole("button", { name: "停止警报", exact: true }),
+    controls.getByRole("button", { name: "Stop siren", exact: true }),
   ).toBeEnabled();
-  await controls.getByRole("button", { name: "停止警报", exact: true }).click();
+  await controls
+    .getByRole("button", { name: "Stop siren", exact: true })
+    .click();
   expect(
     await page.evaluate(() =>
       window.heimanTestCalls.map((call) => call.service),
@@ -188,7 +213,7 @@ test("stop remains available while a siren start request is pending", async ({
   ).toEqual(["turn_on", "turn_off"]);
   await page.evaluate(() => window.heimanTestRelease?.());
   await expect(
-    controls.getByRole("button", { name: "开启警报", exact: true }),
+    controls.getByRole("button", { name: "Start siren", exact: true }),
   ).toBeEnabled();
 });
 test("offline cards are grey and their actuator controls are disabled", async ({
@@ -197,20 +222,20 @@ test("offline cards are grey and their actuator controls are disabled", async ({
   await page.locator("#scenario").selectOption("offline");
   const card = page.locator("#card-smoke"),
     controls = card.locator("heiman-entity-controls");
-  await expect(card.locator(".status-label")).toHaveText("不可用");
+  await expect(card.locator(".status-label")).toHaveText("Unavailable");
   expect(
     await card
       .locator("ha-card")
       .evaluate((node) => getComputedStyle(node).filter),
   ).toBe("grayscale(1)");
   await expect(
-    controls.getByRole("button", { name: "远程自检", exact: true }),
+    controls.getByRole("button", { name: "Remote self-test", exact: true }),
   ).toBeDisabled();
   await expect(
-    controls.getByRole("button", { name: "停止警报", exact: true }),
+    controls.getByRole("button", { name: "Stop siren", exact: true }),
   ).toBeDisabled();
   await expect(
-    controls.getByRole("switch", { name: "状态指示灯", exact: true }),
+    controls.getByRole("switch", { name: "Status indicator", exact: true }),
   ).toBeDisabled();
 });
 test("nine languages cover unavailable states and inline settings without mobile overflow", async ({
@@ -225,19 +250,26 @@ test("nine languages cover unavailable states and inline settings without mobile
       "Trigger selftest";
     window.heimanDemo.refresh();
   });
-  const labels: Record<Language, [string, string]> = {
-    zh: ["不可用", "状态指示灯"],
-    en: ["Unavailable", "Status indicator"],
-    de: ["Nicht verfügbar", "Statusanzeige"],
-    fr: ["Indisponible", "Voyant d’état"],
-    es: ["No disponible", "Indicador de estado"],
-    it: ["Non disponibile", "Indicatore di stato"],
-    nl: ["Niet beschikbaar", "Statuslampje"],
-    pt: ["Indisponível", "Indicador de estado"],
-    pl: ["Niedostępne", "Dioda stanu"],
-  };
+  const languages: Language[] = [
+    "zh",
+    "en",
+    "de",
+    "fr",
+    "es",
+    "it",
+    "nl",
+    "pt",
+    "pl",
+  ];
   await page.locator("#scenario").selectOption("offline");
-  for (const [language, [status, indicator]] of Object.entries(labels)) {
+  for (const language of languages) {
+    const labels = JSON.parse(
+      readFileSync(
+        new URL(`../../src/locales/${language}.json`, import.meta.url),
+        "utf8",
+      ),
+    );
+    const { unavailable: status, indicator } = labels;
     await page.evaluate((language) => {
       const card = document.querySelector(
         "#card-smoke",

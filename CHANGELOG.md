@@ -2,6 +2,7 @@
 
 ## 0.1.0 — Unreleased
 
+- Default to following the current HA user's language with English fallback; use English repository content and isolate localized strings in locale resources.
 - Add HEIMAN Dashboard card discovery and a native visual configuration editor.
 - Add 83 product presets from pinned Z2M metadata, including 10 with explicit ZHA quirk evidence.
 - Add home, fire safety and minimal styles, English/Chinese localization and responsive layouts.

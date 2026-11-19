@@ -7,3 +7,5 @@ Product compatibility evidence belongs in the generated catalog and supported-de
 Run `npm run format`, `npm run check`, and `npm run test:browser`. Commit the built `dist/heiman_dashboard.js` with source changes. The browser tests use simulated HA data; include real device validation details when available. The local demo is available with `npm run dev`.
 
 Pull requests should explain the problem, resulting behavior and validation performed. See [release instructions](docs/RELEASING.md) for HACS and hardware verification.
+
+Use English for source code, comments, documentation, demo content and commit messages. Put translated UI strings and native language names in `src/locales/`. Preserve automatic HA language selection with English fallback.

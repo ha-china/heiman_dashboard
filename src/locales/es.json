@@ -1,4 +1,6 @@
 {
+  "language_name": "Español",
+  "follow_system": "Seguir Home Assistant",
   "home": "Hogar",
   "fire": "Seguridad contra incendios",
   "minimal": "Minimalista",

@@ -1,22 +1,22 @@
-name: Bug report / 问题反馈
+name: Bug report
 description: Report a card, model or entity matching issue
 body:
   - type: input
     id: versions
     attributes:
-      label: Home Assistant and card versions / HA 与卡片版本
+      label: Home Assistant and card versions
     validations:
       required: true
   - type: input
     id: model
     attributes:
-      label: Product model and firmware / 型号与固件
+      label: Product model and firmware
     validations:
       required: true
   - type: dropdown
     id: integration
     attributes:
-      label: Integration / 接入方式
+      label: Integration
       options:
         - Zigbee2MQTT
         - ZHA
@@ -25,11 +25,11 @@ body:
   - type: textarea
     id: reproduce
     attributes:
-      label: Steps, expected behavior and actual result / 重现步骤、预期与实际结果
+      label: Steps, expected behavior and actual result
     validations:
       required: true
   - type: textarea
     id: entities
     attributes:
-      label: Relevant entity IDs, device classes, config and screenshots / 实体、类别、配置与截图
+      label: Relevant entity IDs, device classes, config and screenshots
       description: Remove credentials and private device identifiers before posting.

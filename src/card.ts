@@ -412,6 +412,6 @@ export class HeimanDeviceCard extends HeimanElement {
 export const CARD_METADATA = {
   type: "heiman-device-card",
   name: "HEIMAN Dashboard",
-  description: `HEIMAN · Zigbee2MQTT / ZHA · ${CATALOG.length} models · 家居 / 消防 / 简约`,
+  description: `HEIMAN · Zigbee2MQTT / ZHA · ${CATALOG.length} models · Home / Fire safety / Minimal`,
   preview: true,
 };
