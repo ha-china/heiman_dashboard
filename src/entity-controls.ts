@@ -210,14 +210,13 @@ export class HeimanEntityControls extends LitElement {
   private label(entry: RegistryEntity): string {
     const key = settingLabel(entry);
     return (
+      (key ? this.t(key) : undefined) ||
       entry.name ||
-      (key
-        ? this.t(key)
-        : entry.original_name ||
-          String(
-            this.hass?.states[entry.entity_id]?.attributes.friendly_name ??
-              entry.entity_id,
-          ))
+      entry.original_name ||
+      String(
+        this.hass?.states[entry.entity_id]?.attributes.friendly_name ??
+          entry.entity_id,
+      )
     );
   }
   private blocked(id: string): boolean {
@@ -517,6 +516,7 @@ export class HeimanEntityControls extends LitElement {
   private optionLabel(value: string): string {
     const labels: Record<string, TranslationKey> = {
       stop: "stop",
+      Stop: "stop",
       off: "off",
       on: "on",
       smoke_siren: "smoke_sound",
@@ -529,6 +529,10 @@ export class HeimanEntityControls extends LitElement {
       "Medium level sound": "medium",
       "High level sound": "high",
       "Very high level sound": "very_high",
+      "Low level strobe": "low",
+      "Medium level strobe": "medium",
+      "High level strobe": "high",
+      "Very high level strobe": "very_high",
       "No Strobe": "off",
       Strobe: "on",
       Burglar: "burglar",

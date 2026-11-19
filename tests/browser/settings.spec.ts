@@ -215,6 +215,14 @@ test("nine languages cover unavailable states and inline settings without mobile
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
+  // HA's display registry can merge default English names into `name`.
+  await page.evaluate(() => {
+    window.heimanDemo.hass.entities!["switch.smoke_heartbeat_indicator"].name =
+      "Heartbeat indicator";
+    window.heimanDemo.hass.entities!["button.smoke_trigger_selftest"].name =
+      "Trigger selftest";
+    window.heimanDemo.refresh();
+  });
   const labels: Record<Language, [string, string]> = {
     zh: ["不可用", "状态指示灯"],
     en: ["Unavailable", "Status indicator"],
